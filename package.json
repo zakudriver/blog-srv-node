@@ -1,0 +1,22 @@
+{
+  "name": "koa-ts",
+  "version": "1.0.0",
+  "description": "koa by typescript",
+  "main": "index.js",
+  "author": "Kumo Tyou",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --watch src/**/* -e ts,tsx --exec ts-node ./src/app.ts",
+    "start": "tsc && node dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "koa": "^2.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^10.9.4",
+    "nodemon": "^1.18.4",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3"
+  }
+}
