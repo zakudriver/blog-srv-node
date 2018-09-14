@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+    "target": "es2015",
     "strict": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
@@ -9,9 +9,10 @@
     "outDir": "dist",
     "baseUrl": ".",
     "experimentalDecorators": true,
+    "rootDir": "./src",
     "paths": {
-      "@/*": ["src/*"]
+      "@src/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "types/**/*"]
 }

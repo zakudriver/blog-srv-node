@@ -1,13 +1,13 @@
 import * as Koa from 'koa'
-import * as Router from 'koa-router'
+import Router from './middleware/router'
 import config from './config'
 
 const app = new Koa()
-const router = new Router()
+const router = new Router(app)
 
-app.use(router.routes())
+// 注册路由
+router.register(`${__dirname}/api`)
+
 app.listen(config.prot)
 
 console.log(`Server running on port ${config.prot}`)
-
-
