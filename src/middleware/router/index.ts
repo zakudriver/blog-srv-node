@@ -8,7 +8,7 @@ export interface IDecoratedRouters extends IRouterConfig {
   target: any
 }
 
-interface IControllerFunc {
+export interface IControllerFunc {
   (ctx: Router.IRouterContext, next: () => Promise<any>): any
 }
 

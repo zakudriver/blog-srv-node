@@ -1,10 +1,8 @@
 /**
  *
- *确认是否为Array
+ *确认是否为Array,返回Array
  * @export
  * @param {*} params
  * @returns {any[]}
  */
-export function isToArray(params: any): any[] {
-  return Array.isArray(params) ? params : [params]
-}
+export const isToArray = (params: any) => (Array.isArray(params) ? params : [params]);

@@ -35,3 +35,5 @@ a.splice(0, 0, b)
 
 
 console.log(a)
+
+

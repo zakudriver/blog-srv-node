@@ -6,7 +6,7 @@
   "author": "Kumo Tyou",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --watch src/**/* -e ts,tsx --exec ts-node ./src/app.ts",
+    "dev": "nodemon",
     "start": "tsc && node dist/app.js",
     "watch": "webpack-watch-server --config ./build/webpack.config.js",
     "build:dev": "webpack --config ./build/webpack.config.js"
@@ -28,6 +28,7 @@
     "@types/koa-router": "^7.0.31",
     "@types/mongoose": "^5.2.12",
     "@types/node": "^10.9.4",
+    "chalk": "^2.4.1",
     "nodemon": "^1.18.4",
     "ts-loader": "^5.1.0",
     "ts-node": "^7.0.1",
