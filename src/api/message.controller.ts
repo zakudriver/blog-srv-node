@@ -1,5 +1,5 @@
 import * as Koa from 'koa';
-import { prefix, router, log } from '../middleware/router/decorators';
+import { prefix, router, log, required } from '../middleware/router/decorators';
 
 @prefix('/message')
 export default class MessageController {
@@ -11,4 +11,11 @@ export default class MessageController {
   async getMessage(ctx: Koa.Context) {
     ctx.body = 'test';
   }
+
+  @router({
+    path: '',
+    method: 'post'
+  })
+  @log
+  async addMessage(ctx: Koa.Context) {}
 }
