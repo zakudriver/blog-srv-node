@@ -1,8 +1,10 @@
 import * as path from 'path';
 import * as Router from 'koa-router';
 import * as Koa from 'koa';
-import * as glob from 'glob';
+import * as Glob from 'glob';
+import * as KoaJwt from 'koa-jwt';
 import { IRouterConfig } from './decorators';
+import { verifyToken } from '../token';
 
 export interface IDecoratedRouters extends IRouterConfig {
   target: any;
@@ -20,10 +22,12 @@ export default class MyRouter {
     this.app = app;
   }
 
-  public register(controllerDir: string) {
-    glob.sync(path.join(controllerDir, './*.?s')).forEach(i => {
+  public register(controllerDir: string, jwtOpts: KoaJwt.Options) {
+    Glob.sync(path.join(controllerDir, './*.?s')).forEach(i => {
       require(i);
     });
+
+    const unlessPath: string[] = [];
 
     for (let [config, controller] of MyRouter.__DecoratedRouters) {
       let prefixPath: string = config.target[routerPrefixSymbol];
@@ -31,6 +35,10 @@ export default class MyRouter {
         prefixPath = `/${prefixPath}`;
       }
       let routerPath = prefixPath + config.path;
+
+      if (config.unless) {
+        unlessPath.push(routerPath);
+      }
 
       if (Array.isArray(controller)) {
         controller.forEach(i => {
@@ -41,6 +49,11 @@ export default class MyRouter {
       }
     }
 
+    this.app.use(
+      KoaJwt({ secret: jwtOpts.secret, key: jwtOpts.key, isRevoked: verifyToken, debug: true }).unless({
+        path: unlessPath
+      })
+    );
     this.app.use(this.router.routes());
     this.app.use(this.router.allowedMethods()); // ctx.status为空或者404的时候,丰富response对象的header头
   }

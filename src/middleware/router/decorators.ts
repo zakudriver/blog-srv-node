@@ -35,6 +35,7 @@ export const prefix = (value: string): ClassDecorator => target => {
 export interface IRouterConfig {
   path: string;
   method: 'get' | 'post' | 'delete' | 'put' | 'head' | 'options';
+  unless?: boolean;
 }
 
 export const router = (config: IRouterConfig): MethodDecorator => (target, propertyKey, descriptor) => {
