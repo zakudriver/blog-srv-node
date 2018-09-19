@@ -6,7 +6,7 @@
     },
     "mongo": {
         "development": {
-            "host": "mongodb://localhost:27017/ts-test"
+            "host": "mongodb://zyhuatest:test@118.24.103.174:27017/webtest"
         },
         "production": {
             "host": ""

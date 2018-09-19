@@ -8,7 +8,7 @@ import { sucLog, keyword } from '../../utils/log';
  * 方法装饰器 函数
  * @param middleware
  */
-function methodDecorator(middleware: Router.IMiddleware): MethodDecorator {
+function methodDecoratorFunc(middleware: Router.IMiddleware): MethodDecorator {
   return (target, propertyKey, descriptor) => {
     (target as any)[propertyKey] = isToArray((target as any)[propertyKey]);
     (target as any)[propertyKey].splice((target as any)[propertyKey].length - 1, 0, middleware);
@@ -43,7 +43,8 @@ export const router = (config: IRouterConfig): MethodDecorator => (target, prope
     {
       target,
       method: config.method,
-      path: config.path
+      path: config.path,
+      unless: config.unless
     },
     (target as any)[propertyKey]
   );
@@ -54,7 +55,7 @@ export const router = (config: IRouterConfig): MethodDecorator => (target, prope
  * 日志 装饰器
  */
 let requestID = 0;
-export const log = methodDecorator(logger());
+export const log = methodDecoratorFunc(logger());
 function logger(): Router.IMiddleware {
   return async (ctx, next) => {
     let currentRequestID = requestID++;
@@ -86,7 +87,7 @@ interface IRequiredParams {
   query?: string[];
   params?: string[];
 }
-export const required = (rules: IRequiredParams) => methodDecorator(requireder(rules));
+export const required = (rules: IRequiredParams) => methodDecoratorFunc(requireder(rules));
 
 function requireder(rules: IRequiredParams): Router.IMiddleware {
   return async (ctx, next) => {

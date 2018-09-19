@@ -5,11 +5,12 @@ import { prefix, router, log, required } from '../middleware/router/decorators';
 export default class MessageController {
   @router({
     path: '',
-    method: 'get'
+    method: 'get',
+    unless: true
   })
   @log
   async getMessage(ctx: Koa.Context) {
-    ctx.body = 'test';
+    ctx.body = { test: 'tst' };
   }
 
   @router({

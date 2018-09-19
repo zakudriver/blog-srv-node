@@ -1,5 +1,6 @@
 import * as Koa from 'koa';
 import * as Jwt from 'jsonwebtoken';
+import config from '../../config';
 
 interface IVerifyToken {
   (ctx: Koa.Context, decodedToken: object, token: string): Promise<boolean>;
@@ -7,9 +8,9 @@ interface IVerifyToken {
 
 /**
  * 验证token
- * @param ctx 
- * @param decodedToken 
- * @param token 
+ * @param ctx
+ * @param decodedToken
+ * @param token
  */
 export const verifyToken: IVerifyToken = (ctx, decodedToken, token) => {
   try {
@@ -19,3 +20,13 @@ export const verifyToken: IVerifyToken = (ctx, decodedToken, token) => {
     return Promise.resolve(true);
   }
 };
+
+/**
+ * 生成token
+ * @param userId 用户id
+ */
+export function signToken(userId: string) {
+  const jwtConfig = config.get('jwt');
+  const token = Jwt.sign({ userId }, jwtConfig.secret, { expiresIn: jwtConfig.time });
+  return token;
+}

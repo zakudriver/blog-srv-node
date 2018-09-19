@@ -4,7 +4,7 @@ import { prefix, router, log } from '../middleware/router/decorators';
 @prefix('/user')
 export default class userController {
   @router({
-    path: '/log-in',
+    path: '/login',
     method: 'post'
   })
   @log
@@ -13,9 +13,11 @@ export default class userController {
   }
 
   @router({
-    path: '/sign-in',
+    path: '/register',
     method: 'post'
   })
   @log
-  async signIn(ctx: Koa.Context) {}
+  async signIn(ctx: Koa.Context) {
+    console.log(ctx.request);
+  }
 }

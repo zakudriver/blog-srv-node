@@ -34,29 +34,57 @@
 // a.splice(0, 0, b)
 
 // console.log(a)
-const dosm: any = {
-  get: (target: any, key: any) => {
-    console.log(target);
-    console.log(key);
-    return target[key];
-  },
-  set: (target: any, key: any, val: any) => {
-    console.log(target);
-    console.log(key);
-    console.log(val);
-    target[key] = val;
-    return true
-  }
-};
+// const dosm: any = {
+//   get: (target: any, key: any) => {
+//     console.log(target);
+//     console.log(key);
+//     return target[key];
+//   },
+//   set: (target: any, key: any, val: any) => {
+//     console.log(target);
+//     console.log(key);
+//     console.log(val);
+//     target[key] = val;
+//     return true;
+//   }
+// };
 
-const t: any = new Proxy(
-  {
-    name: 'test',
-    aget: 222
-  },
-  dosm
-);
+// const t: any = new Proxy(
+//   {
+//     name: 'test',
+//     aget: 222
+//   },
+//   dosm
+// );
 
 // console.log(t.name);
-t.aget = 11;
 // console.log(t);
+
+class Watch {
+  target: any;
+  todo: any;
+  constructor(value: any) {
+    this.todo = {};
+    this.obj = {};
+    this.target = new Proxy(value, this.todo);
+  }
+
+  set(func: any) {
+    Object.assign(this.todo, {
+      set: () => {
+        func();
+        return true;
+      }
+    });
+  }
+}
+
+let t = { name: 'zzz' };
+const a = new Watch(t);
+// console.log(a);
+
+a.set(() => {
+  console.log('set');
+});
+
+a.target.name = '11';
