@@ -1,25 +1,41 @@
-// function add(val: any) {
+// function methodDecoratorFunc(): MethodDecorator {
+//   return (target, propertyKey, descriptor) => {
+//     console.log(target);
+//   };
+// }
+
+// function add() {
 //   return (target: any) => {
 //     // console.log(target)
 //     // console.log(name)
-//     target.cc = val
-//   }
+//     target.cc = 111;
+//   };
 // }
 
-// function ed(val: any) {
+// function ed() {
 //   return (t: any, name: any) => {
-//     console.log('执行了nam')
-//     console.log(t[name])
-//   }
+//     console.log('执行了nam');
+//     console.log(t[name]);
+//   };
 // }
 
-// @add('11')
-// class Tes {
-//   @ed('111')
-//   nam (){
-//     console.log('nam')
-//   }
+// function ch(): MethodDecorator {
+//   return (target, propertyKey, descriptor) => {
+//     (target as any)[propertyKey] = 'yyy';
+//   };
 // }
+const aa: MethodDecorator = (target, propertyKey, descriptor) => {
+  console.log(target);
+};
+
+class Tes {
+  @aa
+  nam() {
+    console.log('zzz');
+  }
+}
+
+console.log(new Tes().nam());
 
 // // console.log(new Tes().nam)
 // console.log((Tes as any).cc)
@@ -60,31 +76,38 @@
 // console.log(t.name);
 // console.log(t);
 
-class Watch {
-  target: any;
-  todo: any;
-  constructor(value: any) {
-    this.todo = {};
-    this.obj = {};
-    this.target = new Proxy(value, this.todo);
-  }
+// class Watch {
+//   target: any;
+//   todo: any;
+//   constructor(value: any) {
+//     this.todo = {};
+//     this.obj = {};
+//     this.target = new Proxy(value, this.todo);
+//   }
 
-  set(func: any) {
-    Object.assign(this.todo, {
-      set: () => {
-        func();
-        return true;
-      }
-    });
-  }
-}
+//   set(func: any) {
+//     Object.assign(this.todo, {
+//       set: () => {
+//         func();
+//         return true;
+//       }
+//     });
+//   }
+// }
 
-let t = { name: 'zzz' };
-const a = new Watch(t);
-// console.log(a);
+// let t = { name: 'zzz' };
+// const a = new Watch(t);
+// // console.log(a);
 
-a.set(() => {
-  console.log('set');
-});
+// a.set(() => {
+//   console.log('set');
+// });
 
-a.target.name = '11';
+// a.target.name = '11';
+
+// function unzip(): MethodDecorator {
+//   return <T>(target, propertyKey, descriptor: TypedPropertyDescriptor<T>) => {
+//     // descriptor.value = 222;
+//     console.log(222)
+//   };
+// }
