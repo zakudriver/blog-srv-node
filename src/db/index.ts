@@ -1,19 +1,30 @@
 import * as Mongoose from 'mongoose';
-import config from '../config';
+import { keyword } from '../libs/log';
+import { UserMod } from './model';
+import { IUser } from './model/user';
 
-Mongoose.connect(config.get('mongo'));
+interface Database {
+  UserModel: Mongoose.Model<IUser>;
+}
 
-//连接成功终端显示消息
-Mongoose.connection.on('connected', () => {
-  console.log('Mongoose connection open to ' + config.get('mongo'));
-});
-//连接失败终端显示消息
-Mongoose.connection.on('error', () => {
-  console.log('Mongoose error ');
-});
-//连接断开终端显示消息
-Mongoose.connection.on('disconnected', () => {
-  console.log('Mongoose disconnected');
-});
+export default function DbConnection(dbURL: string): Database {
+  (<any>Mongoose).Promise = global.Promise;
+  
+  Mongoose.connect(dbURL);
 
-export default Mongoose;
+  //连接成功终端显示消息
+  Mongoose.connection.on('connected', () => {
+    console.log('Mongoose connection open to ' + keyword('yellow')(dbURL));
+  });
+  //连接失败终端显示消息
+  Mongoose.connection.on('error', () => {
+    console.log('Mongoose error ');
+  });
+  //连接断开终端显示消息
+  Mongoose.connection.on('disconnected', () => {
+    console.log('Mongoose disconnected');
+  });
+  return {
+    UserModel: UserMod
+  };
+}

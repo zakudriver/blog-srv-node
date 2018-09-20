@@ -15,6 +15,14 @@ const UserSchema = new Mongoose.Schema(
     password: {
       type: String,
       required: true
+    },
+    createTime: {
+      type: Date,
+      default: Date.now
+    },
+    updateTime: {
+      type: Date,
+      default: Date.now
     }
   },
   {

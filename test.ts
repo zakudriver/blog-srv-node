@@ -125,29 +125,37 @@ import { prototype } from 'koa-router';
 //   };
 // }
 
-const t: MethodDecorator = (target, propertyKey, descriptor) => {
-  const method = (descriptor as any).value;
-  (descriptor as any).value = (...args: any[]) => {
-    args[0] += 1;
-    return method.apply(target, args);
-  };
-};
+// const t: MethodDecorator = (target, propertyKey, descriptor) => {
+//   const method = (descriptor as any).value;
+//   (descriptor as any).value = (...args: any[]) => {
+//     args[0] += 1;
+//     return method.apply(target, args);
+//   };
+// };
 
-function tt(t: string): MethodDecorator {
-  return (target, propertyKey, descriptor) => {
-    const method = (descriptor as any).value;
-    (descriptor as any).value = (...args: any[]) => {
-      args[0] += t;
-      return method.apply(target, args);
-    };
-  };
-}
+// function tt(t: string): MethodDecorator {
+//   return (target, propertyKey, descriptor) => {
+//     const method = (descriptor as any).value;
+//     (descriptor as any).value = (...args: any[]) => {
+//       args[0] += t;
+//       return method.apply(target, args);
+//     };
+//   };
+// }
 
-class Name {
-  @tt('zz')
-  test(name: string) {
-    console.log(name);
+// class Name {
+//   @tt('zz')
+//   test(name: string) {
+//     console.log(name);
+//   }
+// }
+
+// new Name().test('222');
+
+function a(){
+  return ()=>{
+    console.log(11)
   }
 }
 
-new Name().test('222');
+a()()

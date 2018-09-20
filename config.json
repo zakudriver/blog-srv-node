@@ -5,12 +5,8 @@
         "log_path": "logs/"
     },
     "mongo": {
-        "development": {
-            "host": "mongodb://zyhuatest:test@118.24.103.174:27017/webtest"
-        },
-        "production": {
-            "host": ""
-        }
+        "development": "mongodb://zyhuatest:test@118.24.103.174:27017/webtest",
+        "production": ""
     },
     "redis": {
         "development": {
@@ -29,5 +25,8 @@
         "secret": "kumo",
         "key": "zyhua",
         "time": "1d"
+    },
+    "user": {
+        "salt": "zyhua"
     }
 }

@@ -1,14 +1,14 @@
 import * as Router from 'koa-router';
 import MyRouter, { routerPrefixSymbol } from './index';
-import { isToArray } from '../../utils';
-import { sucLog, keyword } from '../../utils/log';
+import { isToArray } from '../../libs';
+import { sucLog, keyword } from '../../libs/log';
 
 /**
  * 封装函数
  * 方法装饰器 函数
  * @param middleware
  */
-function methodDecoratorFunc(middleware: Router.IMiddleware): MethodDecorator {
+function buildMethodDecorator(middleware: Router.IMiddleware): MethodDecorator {
   return (target, propertyKey, descriptor) => {
     (target as any)[propertyKey] = isToArray((target as any)[propertyKey]);
     (target as any)[propertyKey].splice((target as any)[propertyKey].length - 1, 0, middleware);
@@ -55,7 +55,7 @@ export const router = (config: IRouterConfig): MethodDecorator => (target, prope
  * 日志 装饰器
  */
 let requestID = 0;
-export const log = methodDecoratorFunc(logger());
+export const log = buildMethodDecorator(logger());
 function logger(): Router.IMiddleware {
   return async (ctx, next) => {
     let currentRequestID = requestID++;
@@ -87,7 +87,7 @@ interface IRequiredParams {
   query?: string[];
   params?: string[];
 }
-export const required = (rules: IRequiredParams) => methodDecoratorFunc(requireder(rules));
+export const required = (rules: IRequiredParams) => buildMethodDecorator(requireder(rules));
 
 function requireder(rules: IRequiredParams): Router.IMiddleware {
   return async (ctx, next) => {
