@@ -1,3 +1,5 @@
+import { prototype } from 'koa-router';
+
 // function methodDecoratorFunc(): MethodDecorator {
 //   return (target, propertyKey, descriptor) => {
 //     console.log(target);
@@ -24,18 +26,29 @@
 //     (target as any)[propertyKey] = 'yyy';
 //   };
 // }
-const aa: MethodDecorator = (target, propertyKey, descriptor) => {
-  console.log(target);
-};
+// const aa: MethodDecorator = (target, propertyKey, descriptor) => {
+//   console.log(target as any);
+// };
 
-class Tes {
-  @aa
-  nam() {
-    console.log('zzz');
-  }
-}
+// const bb: PropertyDecorator = (target, propertyKey) => {
+//   console.log((target as any).prototype);
+// };
 
-console.log(new Tes().nam());
+// class Tes {
+//   a: number;
+//   constructor() {
+//     this.a = 111;
+//   }
+
+//   @aa
+//   nam() {
+//     console.log('zzz');
+//   }
+// }
+
+// console.log(new Tes().nam);
+
+// console.log(new Tes().nam());
 
 // // console.log(new Tes().nam)
 // console.log((Tes as any).cc)
@@ -111,3 +124,30 @@ console.log(new Tes().nam());
 //     console.log(222)
 //   };
 // }
+
+const t: MethodDecorator = (target, propertyKey, descriptor) => {
+  const method = (descriptor as any).value;
+  (descriptor as any).value = (...args: any[]) => {
+    args[0] += 1;
+    return method.apply(target, args);
+  };
+};
+
+function tt(t: string): MethodDecorator {
+  return (target, propertyKey, descriptor) => {
+    const method = (descriptor as any).value;
+    (descriptor as any).value = (...args: any[]) => {
+      args[0] += t;
+      return method.apply(target, args);
+    };
+  };
+}
+
+class Name {
+  @tt('zz')
+  test(name: string) {
+    console.log(name);
+  }
+}
+
+new Name().test('222');

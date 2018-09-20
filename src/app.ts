@@ -1,9 +1,13 @@
 import * as Koa from 'koa';
+import * as cors from '@koa/cors' 
 import Router from './middleware/router';
 import config from './config';
 
+
 const app = new Koa();
 const router = new Router(app);
+
+app.use(cors())
 
 // 注册路由
 router.register(`${__dirname}/api`, {
