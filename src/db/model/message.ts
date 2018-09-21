@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose'
 
-interface IMessage extends mongoose.Document {
+export interface IMessage extends mongoose.Document {
   email: string
   time: string
   text: string

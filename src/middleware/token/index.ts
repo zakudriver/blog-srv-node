@@ -13,7 +13,17 @@ interface IVerifyToken {
  * @param token
  */
 export const verifyToken: IVerifyToken = (ctx, decodedToken, token) => {
+  const jwtConfig = config.get('jwt');
+  console.log('verify')
+  return Promise.resolve(true);
+
   try {
+    // const tkn = Jwt.verify(token, jwtConfig.secret);
+    // console.log(tkn);
+    ctx.body = {
+      msg: 'token过期'
+    };
+
     return Promise.resolve(false);
   } catch (e) {
     ctx.throw(401, 'Invalid token, please restart');

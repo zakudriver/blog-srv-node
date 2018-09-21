@@ -6,10 +6,10 @@ export default class MessageController {
   @router({
     path: '',
     method: 'get',
-    unless: true
   })
   @log
   async getMessage(ctx: Koa.Context) {
+    console.log(ctx.query)
     ctx.body = { test: 'tst' };
   }
 

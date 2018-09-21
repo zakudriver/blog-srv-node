@@ -1,26 +1,49 @@
 import * as Koa from 'koa';
-import * as Crypto from 'crypto';
-import { prefix, router, log } from '../middleware/router/decorators';
+import { prefix, router, log, required } from '../middleware/router/decorators';
 import { signToken } from '../middleware/token';
 import { UserMod } from '../db/model';
-import { errLog } from '../libs/log';
-import config from '../config';
+import { cryptPwd } from '../libs/utils';
+import { trycatch } from '../libs/utils';
 
 @prefix('/user')
 export default class userController {
   @router({
     path: '/login',
-    method: 'get',
+    method: 'post',
     unless: true
   })
+  @required(['username', 'password'])
   @log
   async logIn(ctx: Koa.Context) {
-    console.log(ctx.body);
-    const req = ctx.request;
-    const results = await UserMod.findOne(req);
-    ctx.body = {
-      code: 0
-    };
+    const req = ctx.request.body as { username: string; password: string };
+
+    await trycatch(ctx, async () => {
+      const results = await UserMod.findOne({
+        username: req.username
+      });
+      if (results) {
+        if (cryptPwd(req.password) === results.password) {
+          ctx.body = {
+            code: 0,
+            data: null,
+            msg: '登录成功',
+            token: signToken(results._id)
+          };
+        } else {
+          ctx.body = {
+            code: 1,
+            data: null,
+            msg: '密码错误'
+          };
+        }
+      } else {
+        ctx.body = {
+          code: 1,
+          data: null,
+          msg: '账号不存在'
+        };
+      }
+    });
   }
 
   @router({
@@ -31,29 +54,33 @@ export default class userController {
   @log
   async signIn(ctx: Koa.Context) {
     const newUser = new UserMod({
-      
+      // username: '',
+      // password: ''
     });
 
-    try {
+    await trycatch(ctx, async () => {
       const results = await newUser.save();
       ctx.body = {
         code: 0,
         data: results,
         msg: '注册账号成功'
       };
-    } catch (err) {
-      ctx.body = {
-        code: 0,
-        data: null,
-        msg: err.errmsg
-      };
-      errLog(err);
-    }
-  }
-}
+    });
 
-function cryptPwd(password: string, salt = config.get('user').salt) {
-  const saltPassword = password + ':' + salt;
-  const md5 = Crypto.createHash('md5');
-  return md5.update(saltPassword).digest('hex');
+    // try {
+    //   const results = await newUser.save();
+    //   ctx.body = {
+    //     code: 0,
+    //     data: results,
+    //     msg: '注册账号成功'
+    //   };
+    // } catch (err) {
+    //   ctx.body = {
+    //     code: 1,
+    //     data: null,
+    //     msg: err.errmsg
+    //   };
+    //   errLog(err);
+    // }
+  }
 }

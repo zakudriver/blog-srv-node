@@ -1,15 +1,16 @@
 import * as Mongoose from 'mongoose';
 import { keyword } from '../libs/log';
-import { UserMod } from './model';
-import { IUser } from './model/user';
+import UserMod, { IUser } from './model/user';
+import MessageMod, { IMessage } from './model/message';
 
 interface Database {
   UserModel: Mongoose.Model<IUser>;
+  MessageModel: Mongoose.Model<IMessage>;
 }
 
 export default function DbConnection(dbURL: string): Database {
   (<any>Mongoose).Promise = global.Promise;
-  
+
   Mongoose.connect(dbURL);
 
   //连接成功终端显示消息
@@ -25,6 +26,7 @@ export default function DbConnection(dbURL: string): Database {
     console.log('Mongoose disconnected');
   });
   return {
-    UserModel: UserMod
+    UserModel: UserMod,
+    MessageModel: MessageMod
   };
 }

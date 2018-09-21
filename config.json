@@ -24,7 +24,7 @@
     "jwt": {
         "secret": "kumo",
         "key": "zyhua",
-        "time": "1d"
+        "time": "6000"
     },
     "user": {
         "salt": "zyhua"
