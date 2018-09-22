@@ -83,22 +83,29 @@ function logger(): Router.IMiddleware {
  * 必填参数验证 装饰器
  * @param rules
  */
-interface IRequiredParams {
-  query?: string[];
-  params?: string[];
-}
-export const required = (rules: IRequiredParams) => buildMethodDecorator(requireder(rules));
+export const required = (rules: string[]) => buildMethodDecorator(requireder(rules));
 
-function requireder(rules: IRequiredParams): Router.IMiddleware {
+function requireder(rules: string[]): Router.IMiddleware {
   return async (ctx, next) => {
-    if (rules.query) {
-      for (let name of rules.query) {
-        if (!ctx.query[name]) ctx.throw(412, `GET Request query: ${name} required`);
+    if (ctx.method.toLocaleLowerCase() === 'get') {
+      for (let name of rules) {
+        if (!ctx.query[name]) {
+          return ctx.body = {
+            code: 1,
+            data: null,
+            msg: `${ctx.method} Request query: ${name} required`
+          };
+        }
       }
-    }
-    if (rules.params) {
-      for (let name of rules.params) {
-        if (!ctx.params[name]) ctx.throw(412, `GET Request params: ${name} required`);
+    } else {
+      for (let name of rules) {
+        if (!(<any>ctx.request.body)[name]) {
+          return ctx.body = {
+            code: 1,
+            data: null,
+            msg: `${ctx.method} Request params: ${name} required`
+          };
+        }
       }
     }
     await next();
