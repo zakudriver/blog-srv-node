@@ -31,7 +31,7 @@ export default class userController {
   @log
   async signIn(ctx: Koa.Context) {
     const newUser = new UserMod({
-      
+
     });
 
     try {
