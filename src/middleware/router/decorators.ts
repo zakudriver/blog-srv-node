@@ -1,5 +1,7 @@
 import * as Router from 'koa-router';
+import * as Jwt from 'jsonwebtoken';
 import MyRouter, { routerPrefixSymbol } from './index';
+import { verifyToken } from '../auth';
 import { isToArray } from '../../libs';
 import { sucLog, keyword } from '../../libs/log';
 
@@ -90,24 +92,63 @@ function requireder(rules: string[]): Router.IMiddleware {
     if (ctx.method.toLocaleLowerCase() === 'get') {
       for (let name of rules) {
         if (!ctx.query[name]) {
-          return ctx.body = {
+          return (ctx.body = {
             code: 1,
             data: null,
             msg: `${ctx.method} Request query: ${name} required`
-          };
+          });
         }
       }
     } else {
       for (let name of rules) {
         if (!(<any>ctx.request.body)[name]) {
-          return ctx.body = {
+          return (ctx.body = {
             code: 1,
             data: null,
             msg: `${ctx.method} Request params: ${name} required`
-          };
+          });
         }
       }
     }
     await next();
   };
 }
+
+export const auth = buildMethodDecorator(verifyToken);
+
+// function auther(): Router.IMiddleware {
+//   return async (ctx, next) => {
+//     console.log('auth');
+//     let token = ctx.request.headers.authorization;
+
+//     console.log(token);
+//     if (!token) {
+//       return (ctx.body = {
+//         code: 1,
+//         data: null,
+//         msg: '登陆失效，请重新登陆'
+//       });
+//     } else {
+//       token = token.split(' ')[1];
+//       const payload = (Jwt.decode(token, { complete: true }) as any).payload;
+//       const nowTime = new Date().getTime();
+//       const difference = nowTime - payload.time;
+//       const ichiH = 1000 * 60 * 60;
+
+//       if (difference <= ichiH) {
+//         await next();
+//       } else if (difference > ichiH && difference <= ichiH * 3) {
+//         // redis
+//       } else {
+//         return (ctx.body = {
+//           code: 1,
+//           data: null,
+//           msg: '登陆失效，请重新登陆'
+//         });
+//       }
+//       return console.log(difference);
+//     }
+
+//     await next();
+//   };
+// }

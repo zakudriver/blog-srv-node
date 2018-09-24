@@ -4,7 +4,7 @@ import * as Koa from 'koa';
 import * as Glob from 'glob';
 import * as KoaJwt from 'koa-jwt';
 import { IRouterConfig } from './decorators';
-import { verifyToken } from '../token';
+// import { verifyToken } from '../token';
 
 export interface IDecoratedRouters extends IRouterConfig {
   target: any;
@@ -49,11 +49,11 @@ export default class MyRouter {
       }
     }
 
-    this.app.use(
-      KoaJwt({ secret: jwtOpts.secret, key: jwtOpts.key, isRevoked: verifyToken, debug: true }).unless({
-        path: unlessPath
-      })
-    );
+    // this.app.use(
+    //   KoaJwt({ secret: jwtOpts.secret, key: jwtOpts.key, isRevoked: verifyToken, debug: true }).unless({
+    //     path: unlessPath
+    //   })
+    // );
     this.app.use(this.router.routes());
     this.app.use(this.router.allowedMethods()); // ctx.status为空或者404的时候,丰富response对象的header头
   }

@@ -1,9 +1,12 @@
 import * as Koa from 'koa';
 import { prefix, router, log, required } from '../middleware/router/decorators';
-import { signToken } from '../middleware/token';
+import { signToken } from '../middleware/auth';
 import { UserMod } from '../db/model';
-import { cryptPwd } from '../libs/utils';
-import { trycatch } from '../libs/utils';
+import { cryptPwd, trycatch } from '../libs/utils';
+import redis from '../middleware/redis';
+import config from '../config';
+
+const jwt = config.get('jwt');
 
 @prefix('/user')
 export default class userController {
@@ -23,12 +26,20 @@ export default class userController {
       });
       if (results) {
         if (cryptPwd(req.password) === results.password) {
+          const token = signToken(results._id);
           ctx.body = {
             code: 0,
             data: null,
             msg: '登录成功',
-            token: signToken(results._id)
+            token
           };
+          const _id = results._id.toString();
+          await redis.set(_id, token, () => {
+            console.log('set ok');
+          });
+          redis.expire(_id, jwt.overtime, () => {
+            console.log('expire ok');
+          });
         } else {
           ctx.body = {
             code: 1,

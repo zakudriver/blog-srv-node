@@ -25,7 +25,8 @@
     "koa-jwt": "^3.5.1",
     "koa-router": "^7.4.0",
     "mongoose": "^5.2.14",
-    "nconf": "^0.10.0"
+    "nconf": "^0.10.0",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "@types/glob": "^5.0.35",
@@ -37,6 +38,7 @@
     "@types/mongoose": "^5.2.12",
     "@types/nconf": "^0.0.37",
     "@types/node": "^10.9.4",
+    "@types/redis": "^2.8.6",
     "chalk": "^2.4.1",
     "nodemon": "^1.18.4",
     "ts-loader": "^5.1.0",

@@ -1,5 +1,5 @@
 import * as Koa from 'koa';
-import { prefix, router, log, required } from '../middleware/router/decorators';
+import { prefix, router, log, required,auth } from '../middleware/router/decorators';
 
 @prefix('/message')
 export default class MessageController {
@@ -7,6 +7,7 @@ export default class MessageController {
     path: '',
     method: 'get',
   })
+  @auth
   @log
   async getMessage(ctx: Koa.Context) {
     console.log(ctx.query)
