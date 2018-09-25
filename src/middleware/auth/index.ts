@@ -52,7 +52,7 @@ export function signToken(userId: string) {
  */
 export const verifyToken: Router.IMiddleware = async (ctx, next) => {
   console.log('auth');
-  let token = ctx.request.headers.authorization;
+  const token = ctx.request.headers.authorization.split(' ')[1];
 
   console.log(token);
   if (!token) {
@@ -62,17 +62,31 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
       msg: '登陆失效，请重新登陆'
     });
   } else {
-    token = token.split(' ')[1];
-    const payload = (Jwt.decode(token, { complete: true }) as any).payload;
+    const payload = Jwt.decode(token, { complete: true }) && (Jwt.decode(token, { complete: true }) as any).payload;
     const nowTime = new Date().getTime();
     const difference = nowTime - payload.time;
 
     await redis.get(payload.userId, async (err, val) => {
+      console.log('val');
+      console.log(val);
+      if (err) {
+        ctx.body = {
+          code: 1,
+          data: null,
+          msg: err
+        };
+      }
       if (val === token) {
+        console.log(difference);
+        console.log(jwt.settlingtime);
+
         if (difference <= jwt.settlingtime) {
+          console.log(jwt.settlingtime);
           await next();
         } else if (difference > jwt.settlingtime && difference <= jwt.overtime) {
           // redis
+          await redis.expire(payload._id, (jwt.overtime - jwt.settlingtime) / 1000);
+          await next();
         } else {
           return (ctx.body = {
             code: 1,
@@ -81,14 +95,18 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
           });
         }
       } else {
-        return (ctx.body = {
+        console.log('here');
+        // return (ctx.body = {
+        //   code: 1,
+        //   data: null,
+        //   msg: '登陆失效，请重新登陆'
+        // });
+        ctx.body = {
           code: 1,
           data: null,
           msg: '登陆失效，请重新登陆'
-        });
+        };
       }
     });
   }
-
-  await next();
 };

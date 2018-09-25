@@ -37,7 +37,7 @@ export default class userController {
           await redis.set(_id, token, () => {
             console.log('set ok');
           });
-          redis.expire(_id, jwt.overtime, () => {
+          redis.expire(_id, jwt.overtime / 1000, () => {
             console.log('expire ok');
           });
         } else {

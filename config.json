@@ -24,8 +24,8 @@
     "jwt": {
         "secret": "kumo",
         "key": "zyhua",
-        "overtime": "10800",
-        "settlingtime": "3600"
+        "overtime": "10800000",
+        "settlingtime": "3600000"
     },
     "user": {
         "salt": "zyhua"

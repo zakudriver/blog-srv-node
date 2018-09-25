@@ -10,7 +10,7 @@ export default class MessageController {
   @auth
   @log
   async getMessage(ctx: Koa.Context) {
-    console.log(ctx.query)
+    console.log('getMessage')
     ctx.body = { test: 'tst' };
   }
 
