@@ -14,6 +14,14 @@ export function cryptPwd(password: string, salt = config.get('user').salt) {
   return md5.update(saltPassword).digest('hex');
 }
 
+/**
+ * await错误处理
+ * try{}catch(err){}
+ * @export
+ * @param {Koa.Context} ctx
+ * @param {() => void} func
+ * @param {string} [errMsg]
+ */
 export async function trycatch(ctx: Koa.Context, func: () => void, errMsg?: string) {
   try {
     await func();
