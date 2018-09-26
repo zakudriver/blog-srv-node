@@ -4,6 +4,7 @@ import * as BodyParser from 'koa-bodyparser';
 import Router from './middleware/router';
 import DbConnection from './db';
 import config from './config';
+import { terminalLog } from './libs/log';
 
 const app = new Koa();
 const router = new Router(app);
@@ -25,4 +26,4 @@ router.register(`${__dirname}/api`, {
 
 app.listen(config.get('port'));
 
-console.log(`Server running on port ${config.get('port')}`);
+terminalLog(`Server running on port ${config.get('port')}`);

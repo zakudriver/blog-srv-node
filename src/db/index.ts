@@ -11,7 +11,10 @@ interface Database {
 export default function DbConnection(dbURL: string): Database {
   (<any>Mongoose).Promise = global.Promise;
 
-  Mongoose.connect(dbURL);
+  Mongoose.connect(
+    dbURL,
+    { useNewUrlParser: true }
+  );
 
   //连接成功终端显示消息
   Mongoose.connection.on('connected', () => {

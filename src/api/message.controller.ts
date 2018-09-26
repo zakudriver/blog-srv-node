@@ -1,16 +1,18 @@
 import * as Koa from 'koa';
-import { prefix, router, log, required,auth } from '../middleware/router/decorators';
+import { prefix, router, log, required, auth } from '../middleware/router/decorators';
+import { MessageMod } from '../db/model';
 
 @prefix('/message')
 export default class MessageController {
   @router({
     path: '',
-    method: 'get',
+    method: 'get'
   })
   @auth
   @log
   async getMessage(ctx: Koa.Context) {
-    console.log('getMessage')
+    const req = ctx.query;
+    console.log(req)
     ctx.body = { test: 'tst' };
   }
 

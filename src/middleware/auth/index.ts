@@ -1,9 +1,8 @@
-import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as Jwt from 'jsonwebtoken';
-import redis from '../redis';
+import redis from '../../redis';
+import { errLog, terminalLog } from '../../libs/log';
 import config from '../../config';
-import { resolve } from 'dns';
 
 const jwt = config.get('jwt');
 
@@ -42,7 +41,7 @@ const jwt = config.get('jwt');
  */
 export function signToken(userId: string) {
   const jwtConfig = config.get('jwt');
-  const token = Jwt.sign({ userId, time: new Date().getTime() }, jwtConfig.secret, { algorithm: 'HS512' });
+  const token = Jwt.sign({ userId }, jwtConfig.secret, { algorithm: 'HS512' });
   return token;
 }
 
@@ -52,70 +51,48 @@ export function signToken(userId: string) {
  * @param next
  */
 export const verifyToken: Router.IMiddleware = async (ctx, next) => {
-  console.log('auth');
-  const token = ctx.request.headers.authorization.split(' ')[1];
+  const overtimeRes = {
+    code: 1,
+    data: null,
+    msg: '登陆失效，请重新登陆'
+  };
 
-  console.log(token);
-  if (!token) {
-    return (ctx.body = {
-      code: 1,
-      data: null,
-      msg: '登陆失效，请重新登陆'
-    });
-  } else {
-    console.log('token');
+  const clientTokenStr = ctx.request.headers.authorization.split(' ')[1];
+  const clientToken: any = Jwt.decode(clientTokenStr, { complete: true });
 
-    const tokenObj: any = Jwt.decode(token, { complete: true });
-    if (tokenObj && tokenObj.payload && tokenObj.payload.time && tokenObj.payload.userId) {
-      const nowTime = new Date().getTime();
-      const difference = nowTime - tokenObj.payload.time;
-      console.log(111);
+  if (clientTokenStr && clientToken.payload.userId) {
+    const nowTime = new Date().getTime();
 
-      const a = await Promise.resolve(
-        redis.get(tokenObj.payload.userId, async (err, val) => {
-          console.log('val');
-          console.log(val ? 1 : 0);
-          if (err) {
-            ctx.body = {
-              code: 1,
-              data: null,
-              msg: err
-            };
-          }
-          if (val === token) {
-            console.log(difference);
-            console.log(jwt.settlingtime);
-
-            if (difference <= jwt.settlingtime) {
-              console.log(jwt.settlingtime);
-              await next();
-            } else if (difference > jwt.settlingtime && difference <= jwt.overtime) {
-              // redis
-              await redis.expire(tokenObj.payload._id, (jwt.overtime - jwt.settlingtime) / 1000);
-              await next();
-            } else {
-              ctx.body = {
-                code: 1,
-                data: null,
-                msg: '登陆失效，请重新登陆'
-              };
-            }
-          } else {
-            ctx.body = {
-              code: 1,
-              data: null,
-              msg: '登陆失效，请重新登陆'
-            };
-          }
-        })
-      );
-      console.log(a);
-    } else {
-      ctx.body = {
-        code: 1,
-        data: null,
-        msg: '登陆失效，请重新登陆'
-      };
+    // redis获取token
+    const redisTokenStr = await redis.getAsync(clientToken.payload.userId);
+    if (!redisTokenStr) {
+      return (ctx.body = overtimeRes);
     }
+    const redisToken = JSON.parse(redisTokenStr);
+    const difference = nowTime - redisToken.time;
+    const over = await redis.ttlAsync(clientToken.payload.userId);
+    terminalLog(`token过期时间：${over}`);
+
+    if (redisToken.token === clientTokenStr) {
+      if (difference <= jwt.settlingtime) {
+        await next();
+      } else if (difference > jwt.settlingtime && difference <= jwt.overtime) {
+        // 重置过期时间
+        await redis.setAsync(
+          clientToken.payload.userId,
+          JSON.stringify({ token: clientTokenStr, time: new Date().getTime() })
+        );
+        const result = await redis.pexpireAsync(clientToken.payload.userId, jwt.overtime - jwt.settlingtime);
+        if (result) {
+          await next();
+        } else {
+          errLog('redis pexpireAsync error');
+        }
+      }
+    } else {
+      ctx.body = overtimeRes;
+    }
+  } else {
+    ctx.body = overtimeRes;
   }
 };

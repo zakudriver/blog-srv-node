@@ -3,7 +3,7 @@ import { prefix, router, log, required } from '../middleware/router/decorators';
 import { signToken } from '../middleware/auth';
 import { UserMod } from '../db/model';
 import { cryptPwd, trycatch } from '../libs/utils';
-import redis from '../middleware/redis';
+import redis from '../redis';
 import config from '../config';
 
 const jwt = config.get('jwt');
@@ -34,12 +34,8 @@ export default class userController {
             token
           };
           const _id = results._id.toString();
-          await redis.set(_id, token, () => {
-            console.log('set ok');
-          });
-          redis.expire(_id, jwt.overtime / 1000, () => {
-            console.log('expire ok');
-          });
+          await redis.setAsync(_id, JSON.stringify({ token, time: new Date().getTime() }));
+          await redis.pexpireAsync(_id, jwt.overtime);
         } else {
           ctx.body = {
             code: 1,
