@@ -9,6 +9,7 @@ export default class MessageController {
     path: '',
     method: 'get'
   })
+  @required(['index', 'limit'])
   @auth
   @log
   async getMessage(ctx: Koa.Context) {
@@ -30,7 +31,7 @@ export default class MessageController {
           rows: results,
           count
         },
-        msg: 'message,拿好'
+        msg: 'message,hold well'
       };
     });
   }
@@ -40,5 +41,38 @@ export default class MessageController {
     method: 'post'
   })
   @log
-  async addMessage(ctx: Koa.Context) {}
+  async addMessage(ctx: Koa.Context) {
+    const req = ctx.request.body;
+
+    const newMessage = new MessageMod({
+      email:'1111111'
+    });
+    await trycatch(ctx, async () => {
+      await newMessage.save();
+      ctx.body = {
+        code: 0,
+        data: null,
+        msg: 'message sent successfully'
+      };
+    });
+  }
+
+  @router({
+    path: '',
+    method: 'delete'
+  })
+  @required(['_id'])
+  @auth
+  @log
+  async rmMessage(ctx: Koa.Context) {
+    const req = <{ _id: string }>ctx.request.body;
+    await trycatch(ctx, async () => {
+      await MessageMod.findByIdAndRemove(req._id);
+      ctx.body = {
+        code: 0,
+        data: null,
+        msg: 'message deleted successfully'
+      };
+    });
+  }
 }

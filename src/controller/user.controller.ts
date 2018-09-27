@@ -12,8 +12,7 @@ const jwt = config.get('jwt');
 export default class userController {
   @router({
     path: '/login',
-    method: 'post',
-    unless: true
+    method: 'post'
   })
   @required(['username', 'password'])
   @log
@@ -55,8 +54,7 @@ export default class userController {
 
   @router({
     path: '/register',
-    method: 'get',
-    unless: true
+    method: 'get'
   })
   @log
   async signIn(ctx: Koa.Context) {

@@ -57,6 +57,13 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
     msg: '登陆失效，请重新登陆'
   };
 
+  if (!ctx.request.headers.authorization) {
+    return (ctx.body = overtimeRes);
+    if (!ctx.request.headers.authorization.split(' ')[1]) {
+      return (ctx.body = overtimeRes);
+    }
+  }
+
   const clientTokenStr = ctx.request.headers.authorization.split(' ')[1];
   const clientToken: any = Jwt.decode(clientTokenStr, { complete: true });
 
@@ -82,8 +89,8 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
           clientToken.payload.userId,
           JSON.stringify({ token: clientTokenStr, time: new Date().getTime() })
         );
-        const result = await redis.pexpireAsync(clientToken.payload.userId, jwt.overtime - jwt.settlingtime);
-        if (result) {
+        const results = await redis.pexpireAsync(clientToken.payload.userId, jwt.overtime - jwt.settlingtime);
+        if (results) {
           await next();
         } else {
           errLog('redis pexpireAsync error');

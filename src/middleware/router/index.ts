@@ -36,10 +36,6 @@ export default class MyRouter {
       }
       let routerPath = prefixPath + config.path;
 
-      if (config.unless) {
-        unlessPath.push(routerPath);
-      }
-
       if (Array.isArray(controller)) {
         controller.forEach(i => {
           this.router[config.method](routerPath, i);

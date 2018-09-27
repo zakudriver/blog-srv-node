@@ -19,7 +19,7 @@ app.use(cors());
 app.use(BodyParser());
 
 // 注册路由
-router.register(`${__dirname}/api`, {
+router.register(`${__dirname}/controller`, {
   secret: config.get('jwt').secret,
   key: config.get('jwt').key
 });
