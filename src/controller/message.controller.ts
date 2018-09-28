@@ -44,9 +44,7 @@ export default class MessageController {
   async addMessage(ctx: Koa.Context) {
     const req = ctx.request.body;
 
-    const newMessage = new MessageMod({
-      email:'1111111'
-    });
+    const newMessage = new MessageMod(req);
     await trycatch(ctx, async () => {
       await newMessage.save();
       ctx.body = {

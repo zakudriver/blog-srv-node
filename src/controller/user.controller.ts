@@ -1,5 +1,5 @@
 import * as Koa from 'koa';
-import { prefix, router, log, required } from '../middleware/router/decorators';
+import { prefix, router, log, required, auth } from '../middleware/router/decorators';
 import { signToken } from '../middleware/auth';
 import { UserMod } from '../db/model';
 import { cryptPwd, trycatch } from '../libs/utils';
@@ -10,6 +10,20 @@ const jwt = config.get('jwt');
 
 @prefix('/user')
 export default class userController {
+  @router({
+    path: '/auth',
+    method: 'post'
+  })
+  @auth
+  @log
+  async auth(ctx: Koa.Context) {
+    ctx.body = {
+      code: 0,
+      data: null,
+      msg: 'verify,pass'
+    };
+  }
+
   @router({
     path: '/login',
     method: 'post'
@@ -29,7 +43,7 @@ export default class userController {
           ctx.body = {
             code: 0,
             data: null,
-            msg: '登录成功',
+            msg: 'login successful',
             token
           };
           const _id = results._id.toString();
@@ -39,14 +53,14 @@ export default class userController {
           ctx.body = {
             code: 1,
             data: null,
-            msg: '密码错误'
+            msg: 'password error'
           };
         }
       } else {
         ctx.body = {
           code: 1,
           data: null,
-          msg: '账号不存在'
+          msg: 'the user name does not exist'
         };
       }
     });
@@ -68,7 +82,7 @@ export default class userController {
       ctx.body = {
         code: 0,
         data: results,
-        msg: '注册账号成功'
+        msg: 'register successful'
       };
     });
 
@@ -77,7 +91,7 @@ export default class userController {
     //   ctx.body = {
     //     code: 0,
     //     data: results,
-    //     msg: '注册账号成功'
+    //     msg: 'register successful'
     //   };
     // } catch (err) {
     //   ctx.body = {

@@ -26,7 +26,8 @@ const UserSchema = new Mongoose.Schema(
     }
   },
   {
-    versionKey: false
+    versionKey: false,
+    timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
   }
 );
 

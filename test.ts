@@ -152,10 +152,4 @@ import { prototype } from 'koa-router';
 
 // new Name().test('222');
 
-function a(){
-  return ()=>{
-    console.log(11)
-  }
-}
-
-a()()
+console.log(Date.now)

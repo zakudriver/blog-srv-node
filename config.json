@@ -10,8 +10,8 @@
   },
   "redis": {
     "development": {
-      "url": "118.24.103.174",
-      "host": 6379,
+      "host": "118.24.103.174",
+      "port": 6379,
       "pwd": "zyhua1122"
     },
     "production": {

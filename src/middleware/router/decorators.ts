@@ -112,41 +112,8 @@ function requireder(rules: string[]): Router.IMiddleware {
   };
 }
 
+/**
+ * @auth
+ * 验证 装饰器
+ */
 export const auth = buildMethodDecorator(verifyToken);
-
-// function auther(): Router.IMiddleware {
-//   return async (ctx, next) => {
-//     console.log('auth');
-//     let token = ctx.request.headers.authorization;
-
-//     console.log(token);
-//     if (!token) {
-//       return (ctx.body = {
-//         code: 1,
-//         data: null,
-//         msg: '登陆失效，请重新登陆'
-//       });
-//     } else {
-//       token = token.split(' ')[1];
-//       const payload = (Jwt.decode(token, { complete: true }) as any).payload;
-//       const nowTime = new Date().getTime();
-//       const difference = nowTime - payload.time;
-//       const ichiH = 1000 * 60 * 60;
-
-//       if (difference <= ichiH) {
-//         await next();
-//       } else if (difference > ichiH && difference <= ichiH * 3) {
-//         // redis
-//       } else {
-//         return (ctx.body = {
-//           code: 1,
-//           data: null,
-//           msg: '登陆失效，请重新登陆'
-//         });
-//       }
-//       return console.log(difference);
-//     }
-
-//     await next();
-//   };
-// }

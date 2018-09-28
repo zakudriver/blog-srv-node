@@ -1,9 +1,9 @@
-import * as mongoose from 'mongoose'
+import * as mongoose from 'mongoose';
 
 export interface IMessage extends mongoose.Document {
-  email: string
-  time: string
-  text: string
+  email: string;
+  text: string;
+  time: string;
 }
 
 const messageSchema = new mongoose.Schema(
@@ -12,13 +12,13 @@ const messageSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    time: {
-      type: String,
-      required: true,
-      default: Date.now
-    },
     text: {
-      type: String
+      type: String,
+      required: true
+    },
+    time: {
+      type: Date,
+      default: Date.now
     }
   },
   {
@@ -27,6 +27,6 @@ const messageSchema = new mongoose.Schema(
       createdAt: 'time'
     }
   }
-)
+);
 
-export default mongoose.model<IMessage>('Message', messageSchema)
+export default mongoose.model<IMessage>('Message', messageSchema);

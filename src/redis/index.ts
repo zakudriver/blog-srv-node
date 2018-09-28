@@ -7,7 +7,11 @@ const { promisify } = Util;
 
 const redisConfig = config.get('redis')[config.get('env')];
 
-const client = Redis.createClient(redisConfig.host, redisConfig.url);
+const client = Redis.createClient({
+  host: redisConfig.host,
+  port: redisConfig.port,
+  no_ready_check: true
+});
 
 client.auth(redisConfig.pwd, err => {
   if (err) {
