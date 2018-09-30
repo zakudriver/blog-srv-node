@@ -10,6 +10,7 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "rootDir": "./src",
+    "removeComments": true,
     "paths": {
       "@src/*": ["./src/*"]
     }

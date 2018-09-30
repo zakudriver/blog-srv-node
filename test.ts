@@ -152,4 +152,25 @@ import { prototype } from 'koa-router';
 
 // new Name().test('222');
 
-console.log(Date.now)
+// console.log(Date.now)
+let num = 1;
+
+const a: any = new Proxy(
+  { a: 0 },
+  {
+    get: () => {
+      return num++;
+    }
+  }
+);
+
+// const a:any = {
+//   num: 0,
+//   valueOf: function() {
+//     return this.num += 1
+//   }
+// };
+
+console.log(a.a == 1 && a.a == 2 && a.a == 3);
+
+// (a == 1 && a == 2 && a == 3)

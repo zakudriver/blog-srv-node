@@ -1,5 +1,4 @@
 import * as Router from 'koa-router';
-import * as Jwt from 'jsonwebtoken';
 import MyRouter, { routerPrefixSymbol } from './index';
 import { verifyToken } from '../auth';
 import { isToArray } from '../../libs';
