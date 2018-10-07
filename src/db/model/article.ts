@@ -13,7 +13,8 @@ const articleSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     className: {
       type: String,
@@ -25,6 +26,10 @@ const articleSchema = new mongoose.Schema(
     },
     content: {
       type: String
+    },
+    isFormal: {
+      type: Boolean,
+      required: true
     },
     createTime: {
       type: Date,

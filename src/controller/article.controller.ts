@@ -1,6 +1,5 @@
 import * as Koa from 'koa';
 import { prefix, router, log, required, auth } from '../middleware/router/decorators';
-import { signToken } from '../middleware/auth';
 import { ArticleMod } from '../db/model';
 
 @prefix('/article')
@@ -17,7 +16,7 @@ export default class articleController {
     method: 'get'
   })
   @auth
-  @required(['index', 'limit'])
+  @required(['index', 'limit', 'isFormal'])
   @log
   async getArticleList(ctx: Koa.Context) {}
 

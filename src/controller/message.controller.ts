@@ -17,23 +17,27 @@ export default class MessageController {
     index = +index;
     limit = +limit;
 
-    await trycatch(ctx, async () => {
-      const count = await MessageMod.countDocuments({});
-      const results = await MessageMod.find({})
-        .skip((index - 1) * limit)
-        .limit(limit)
-        .sort({ _id: -1 })
-        .exec();
+    await trycatch(
+      ctx,
+      async () => {
+        const count = await MessageMod.countDocuments({});
+        const results = await MessageMod.find({})
+          .skip((index - 1) * limit)
+          .limit(limit)
+          .sort({ _id: -1 })
+          .exec();
 
-      ctx.body = {
-        code: 0,
-        data: {
-          rows: results,
-          count
-        },
-        msg: 'message,hold well'
-      };
-    });
+        ctx.body = {
+          code: 0,
+          data: {
+            rows: results,
+            count
+          },
+          msg: 'message,hold well'
+        };
+      },
+      'message,get failed'
+    );
   }
 
   @router({
@@ -45,14 +49,18 @@ export default class MessageController {
     const req = ctx.request.body;
 
     const newMessage = new MessageMod(req);
-    await trycatch(ctx, async () => {
-      await newMessage.save();
-      ctx.body = {
-        code: 0,
-        data: null,
-        msg: 'message sent successfully'
-      };
-    });
+    await trycatch(
+      ctx,
+      async () => {
+        await newMessage.save();
+        ctx.body = {
+          code: 0,
+          data: null,
+          msg: 'message sent successfully'
+        };
+      },
+      'message sent failed'
+    );
   }
 
   @router({
@@ -62,15 +70,19 @@ export default class MessageController {
   @required(['_id'])
   @auth
   @log
-  async rmMessage(ctx: Koa.Context) {
+  async removeMessage(ctx: Koa.Context) {
     const req = <{ _id: string }>ctx.request.body;
-    await trycatch(ctx, async () => {
-      await MessageMod.findByIdAndRemove(req._id);
-      ctx.body = {
-        code: 0,
-        data: null,
-        msg: 'message deleted successfully'
-      };
-    });
+    await trycatch(
+      ctx,
+      async () => {
+        await MessageMod.findByIdAndRemove(req._id);
+        ctx.body = {
+          code: 0,
+          data: null,
+          msg: 'message deleted successfully'
+        };
+      },
+      'message deleted failed'
+    );
   }
 }

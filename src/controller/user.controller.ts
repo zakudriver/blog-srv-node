@@ -33,37 +33,41 @@ export default class userController {
   async logIn(ctx: Koa.Context) {
     const req = ctx.request.body as { username: string; password: string };
 
-    await trycatch(ctx, async () => {
-      const results = await UserMod.findOne({
-        username: req.username
-      });
-      if (results) {
-        if (cryptPwd(req.password) === results.password) {
-          const token = signToken(results._id);
-          ctx.body = {
-            code: 0,
-            data: null,
-            msg: 'login successful',
-            token
-          };
-          const _id = results._id.toString();
-          await redis.setAsync(_id, JSON.stringify({ token, time: new Date().getTime() }));
-          await redis.pexpireAsync(_id, jwt.overtime);
+    await trycatch(
+      ctx,
+      async () => {
+        const results = await UserMod.findOne({
+          username: req.username
+        });
+        if (results) {
+          if (cryptPwd(req.password) === results.password) {
+            const token = signToken(results._id);
+            ctx.body = {
+              code: 0,
+              data: null,
+              msg: 'login successful',
+              token
+            };
+            const _id = results._id.toString();
+            await redis.setAsync(_id, JSON.stringify({ token, time: new Date().getTime() }));
+            await redis.pexpireAsync(_id, jwt.overtime);
+          } else {
+            ctx.body = {
+              code: 1,
+              data: null,
+              msg: 'password error'
+            };
+          }
         } else {
           ctx.body = {
             code: 1,
             data: null,
-            msg: 'password error'
+            msg: 'the user name does not exist'
           };
         }
-      } else {
-        ctx.body = {
-          code: 1,
-          data: null,
-          msg: 'the user name does not exist'
-        };
-      }
-    });
+      },
+      'login failed'
+    );
   }
 
   @router({
