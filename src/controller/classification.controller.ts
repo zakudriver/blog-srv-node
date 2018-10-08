@@ -28,10 +28,10 @@ export default class ClassificationController {
     method: 'post'
   })
   @auth
-  @required(['className'])
+  @required(['name'])
   @log
   async addClassification(ctx: Koa.Context) {
-    const req = ctx.request.body as { className: string };
+    const req = ctx.request.body as { name: string };
     const newClassification = new ClassificationMod(req);
     await trycatch(
       ctx,
@@ -66,7 +66,7 @@ export default class ClassificationController {
           const updateArr: any[] = req.map(i => ClassificationMod.findByIdAndUpdate(i._id, { order: i.order }));
           results = await Promise.all(updateArr);
         } else {
-          await ClassificationMod.findByIdAndUpdate(req._id, { className: req.className });
+          await ClassificationMod.findByIdAndUpdate(req._id, { name: req.name });
           results = await ClassificationMod.find().sort({ order: 1 });
         }
         ctx.body = {

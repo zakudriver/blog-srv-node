@@ -1,9 +1,9 @@
 import * as mongoose from 'mongoose';
+import { ObjectID } from 'bson';
 
 export interface IArticle extends mongoose.Document {
   title: string;
   className: string;
-  classId: string;
   content: string;
   createTime: string;
   updateTime: string;
@@ -17,12 +17,9 @@ const articleSchema = new mongoose.Schema(
       unique: true
     },
     className: {
-      type: String,
-      required: true
-    },
-    classId: {
-      type: String,
-      required: true
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Classification'
     },
     content: {
       type: String

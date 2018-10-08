@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export interface IClassification extends mongoose.Document {
-  className: string;
+  name: string;
   order: number;
   createTime: string;
   updateTime: string;
@@ -9,7 +9,7 @@ export interface IClassification extends mongoose.Document {
 
 const classificationSchema = new mongoose.Schema(
   {
-    className: {
+    name: {
       type: String,
       unique: true,
       required: true

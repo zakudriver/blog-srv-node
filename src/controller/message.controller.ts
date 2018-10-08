@@ -20,11 +20,11 @@ export default class MessageController {
     await trycatch(
       ctx,
       async () => {
-        const count = await MessageMod.countDocuments({});
+        const count = await MessageMod.countDocuments();
         const results = await MessageMod.find({})
           .skip((index - 1) * limit)
           .limit(limit)
-          .sort({ _id: -1 })
+          .sort({ time: -1 })
           .exec();
 
         ctx.body = {
@@ -36,7 +36,7 @@ export default class MessageController {
           msg: 'message,hold well'
         };
       },
-      'message,get failed'
+      'message get failed'
     );
   }
 
