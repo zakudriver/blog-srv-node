@@ -2,12 +2,7 @@ import * as Koa from 'koa';
 import { prefix, router, log, required, auth } from '../middleware/router/decorators';
 import { ArticleMod } from '../db/model';
 import { IArticle } from '../db/model/article';
-import { ClassificationMod } from '../db/model';
 import { trycatch } from '../libs/utils';
-
-interface IArticleResponse extends IArticle {
-  className: string;
-}
 
 @prefix('/article')
 export default class articleController {
@@ -15,8 +10,23 @@ export default class articleController {
     path: '',
     method: 'get'
   })
+  @required(['_id'])
   @log
-  async getArticle(ctx: Koa.Context) {}
+  async getArticle(ctx: Koa.Context) {
+    const req = ctx.query;
+    await trycatch(
+      ctx,
+      async () => {
+        const results = await ArticleMod.findById(req._id);
+        ctx.body = {
+          code: 0,
+          data: results,
+          msg: 'article,hold well '
+        };
+      },
+      'article get failed'
+    );
+  }
 
   @router({
     path: '/listpro',
@@ -47,10 +57,10 @@ export default class articleController {
             rows: results,
             count
           },
-          msg: 'article,hold well'
+          msg: 'articles,hold well'
         };
       },
-      'article get failed'
+      'articles get failed'
     );
   }
 
@@ -87,30 +97,27 @@ export default class articleController {
   }
 
   @router({
-    path: '/save',
-    method: 'post'
-  })
-  @auth
-  @log
-  async saveArticle(ctx: Koa.Context) {
-    const req = ctx.request.body;
-
-    ctx.body = {
-      code: 0,
-      data: req,
-      msg: 'article save successfully'
-    };
-    // const newArticle=new ArticleMod()
-  }
-
-  @router({
     path: '',
     method: 'delete'
   })
   @auth
   @required(['_id'])
   @log
-  async removeArticle(ctx: Koa.Context) {}
+  async removeArticle(ctx: Koa.Context) {
+    const req = <{ _id: string }>ctx.request.body;
+    await trycatch(
+      ctx,
+      async () => {
+        await ArticleMod.findByIdAndRemove(req._id);
+        ctx.body = {
+          code: 0,
+          data: null,
+          msg: 'article deleted successfully'
+        };
+      },
+      'article deleted failed'
+    );
+  }
 
   @router({
     path: '',
@@ -119,5 +126,21 @@ export default class articleController {
   @auth
   @required(['_id'])
   @log
-  async modifyArticle(ctx: Koa.Context) {}
+  async updateArticle(ctx: Koa.Context) {
+    const req = ctx.request.body as IArticle;
+    
+    await trycatch(
+      ctx,
+      async () => {
+        const results = await ArticleMod.findByIdAndUpdate(req._id, req);
+        console.log(results);
+        ctx.body = {
+          code: 0,
+          data: null,
+          msg: 'article update successfully'
+        };
+      },
+      'article update failed'
+    );
+  }
 }
