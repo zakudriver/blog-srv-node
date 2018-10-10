@@ -1,5 +1,3 @@
-import { prototype } from 'koa-router';
-
 // function methodDecoratorFunc(): MethodDecorator {
 //   return (target, propertyKey, descriptor) => {
 //     console.log(target);
@@ -153,16 +151,16 @@ import { prototype } from 'koa-router';
 // new Name().test('222');
 
 // console.log(Date.now)
-let num = 1;
+// let num = 1;
 
-const a: any = new Proxy(
-  { a: 0 },
-  {
-    get: () => {
-      return num++;
-    }
-  }
-);
+// const a: any = new Proxy(
+//   { a: 0 },
+//   {
+//     get: () => {
+//       return num++;
+//     }
+//   }
+// );
 
 // const a:any = {
 //   num: 0,
@@ -171,6 +169,21 @@ const a: any = new Proxy(
 //   }
 // };
 
-console.log(a.a == 1 && a.a == 2 && a.a == 3);
+// console.log(a.a == 1 && a.a == 2 && a.a == 3);
 
 // (a == 1 && a == 2 && a == 3)
+import { performance } from 'perf_hooks';
+
+// console.time('start');
+const a = performance.now();
+
+let arr = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
+let obj = { a: 1, b: 2, c: 3 };
+
+for (let i = 0; i < 10000000; i++) {
+  // let test = { ...obj };
+  let test = Object.assign(obj,{});
+  // let test = arr.concat();
+}
+
+console.log(performance.now() - a);
