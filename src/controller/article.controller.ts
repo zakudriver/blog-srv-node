@@ -36,15 +36,26 @@ export default class articleController {
   @required(['index', 'limit'])
   @log
   async getArticleList(ctx: Koa.Context) {
-    let { index, limit } = ctx.query;
+    let { index, limit, condition, className } = ctx.query;
     index = +index;
     limit = +limit;
+    condition = +condition;
+
+    let find = {};
+    if (condition === 1) {
+      find = { isFormal: true };
+    } else if (condition === 2) {
+      find = { isFormal: false };
+    }
+    if (className) {
+      Object.assign(find, { className });
+    }
 
     await trycatch(
       ctx,
       async () => {
         const count = await ArticleMod.countDocuments();
-        const results = await ArticleMod.find({})
+        const results = await ArticleMod.find(find)
           .populate('className', 'name')
           .skip((index - 1) * limit)
           .limit(limit)
@@ -128,7 +139,7 @@ export default class articleController {
   @log
   async updateArticle(ctx: Koa.Context) {
     const req = ctx.request.body as IArticle;
-    
+
     await trycatch(
       ctx,
       async () => {

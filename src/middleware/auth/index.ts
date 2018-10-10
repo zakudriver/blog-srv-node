@@ -6,35 +6,6 @@ import config from '../../config';
 
 const jwt = config.get('jwt');
 
-// interface IVerifyToken {
-//   (ctx: Koa.Context, decodedToken: object, token: string): Promise<boolean>;
-// }
-
-// /**
-//  * 验证token
-//  * @param ctx
-//  * @param decodedToken
-//  * @param token
-//  */
-// export const verifyToken: IVerifyToken = (ctx, decodedToken, token) => {
-//   const jwtConfig = config.get('jwt');
-//   console.log('verify');
-//   return Promise.resolve(true);
-
-//   try {
-//     // const tkn = Jwt.verify(token, jwtConfig.secret);
-//     // console.log(tkn);
-//     ctx.body = {
-//       msg: 'token过期'
-//     };
-
-//     return Promise.resolve(false);
-//   } catch (e) {
-//     ctx.throw(401, 'Invalid token, please restart');
-//     return Promise.resolve(true);
-//   }
-// };
-
 /**
  * 生成token
  * @param userId 用户id
@@ -59,9 +30,10 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
 
   if (!ctx.request.headers.authorization) {
     return (ctx.body = overtimeRes);
-    if (!ctx.request.headers.authorization.split(' ')[1]) {
-      return (ctx.body = overtimeRes);
-    }
+  }
+
+  if (!ctx.request.headers.authorization.split(' ')[1]) {
+    return (ctx.body = overtimeRes);
   }
 
   const clientTokenStr = ctx.request.headers.authorization.split(' ')[1];
