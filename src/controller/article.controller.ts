@@ -18,6 +18,7 @@ export default class articleController {
       ctx,
       async () => {
         const results = await ArticleMod.findById(req._id);
+
         ctx.body = {
           code: 0,
           data: results,
@@ -62,6 +63,10 @@ export default class articleController {
           .sort({ updateTime: 1 })
           .exec();
 
+        results.forEach(i => {
+          i.content = i.content.substr(0, 300);
+        });
+
         ctx.body = {
           code: 0,
           data: {
@@ -89,7 +94,13 @@ export default class articleController {
   @auth
   @log
   async addArticle(ctx: Koa.Context) {
-    const req = ctx.request.body as { title: string; content: string; classId: string; isFormal: boolean; time: string };
+    const req = ctx.request.body as {
+      title: string;
+      content: string;
+      classId: string;
+      isFormal: boolean;
+      time: string;
+    };
     const isFormal = req.isFormal;
     const newArticle = new ArticleMod(req);
     await trycatch(
@@ -104,7 +115,6 @@ export default class articleController {
       },
       `article ${isFormal ? 'pulish' : 'save'} failed`
     );
-    // const newArticle=new ArticleMod()
   }
 
   @router({
