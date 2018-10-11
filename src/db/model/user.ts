@@ -16,14 +16,14 @@ const UserSchema = new Mongoose.Schema(
       type: String,
       required: true
     },
-    createTime: {
-      type: Date,
-      default: Date.now
-    },
-    updateTime: {
-      type: Date,
-      default: Date.now
-    }
+    // createTime: {
+    //   type: Date,
+    //   default: Date.now
+    // },
+    // updateTime: {
+    //   type: Date,
+    //   default: Date.now
+    // }
   },
   {
     versionKey: false,

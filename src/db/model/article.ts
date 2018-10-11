@@ -23,18 +23,21 @@ const articleSchema = new mongoose.Schema(
     content: {
       type: String
     },
+    uploads: {
+      type: Array
+    },
     isFormal: {
       type: Boolean,
       required: true
-    },
-    createTime: {
-      type: Date,
-      default: Date.now
-    },
-    updateTime: {
-      type: Date,
-      default: Date.now
     }
+    // createTime: {
+    //   type: Date,
+    //   default: Date.now
+    // },
+    // updateTime: {
+    //   type: Date,
+    //   default: Date.now
+    // }
   },
   {
     versionKey: false,

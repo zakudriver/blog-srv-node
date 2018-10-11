@@ -15,17 +15,17 @@ const classificationSchema = new mongoose.Schema(
       required: true
     },
     order: {
-      type: Number,
+      type: Number
       // unique: true
     },
-    createTime: {
-      type: String,
-      default: Date.now
-    },
-    updateTime: {
-      type: String,
-      default: Date.now
-    }
+    // createTime: {
+    //   type: Date,
+    //   default: Date.now
+    // },
+    // updateTime: {
+    //   type: Date,
+    //   default: Date.now
+    // }
   },
   {
     versionKey: false,

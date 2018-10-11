@@ -153,8 +153,7 @@ export default class articleController {
     await trycatch(
       ctx,
       async () => {
-        const results = await ArticleMod.findByIdAndUpdate(req._id, req);
-        console.log(results);
+        await ArticleMod.findByIdAndUpdate(req._id, { $set: req });
         ctx.body = {
           code: 0,
           data: null,

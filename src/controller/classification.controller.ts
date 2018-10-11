@@ -63,10 +63,10 @@ export default class ClassificationController {
       async () => {
         let results;
         if (Array.isArray(req)) {
-          const updateArr: any[] = req.map(i => ClassificationMod.findByIdAndUpdate(i._id, { order: i.order }));
+          const updateArr: any[] = req.map(i => ClassificationMod.findByIdAndUpdate(i._id, { $set: { order: i.order } }));
           results = await Promise.all(updateArr);
         } else {
-          await ClassificationMod.findByIdAndUpdate(req._id, { name: req.name });
+          await ClassificationMod.findByIdAndUpdate(req._id, { $set: { name: req.name } });
           results = await ClassificationMod.find().sort({ order: 1 });
         }
         ctx.body = {
