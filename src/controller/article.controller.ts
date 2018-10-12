@@ -5,7 +5,7 @@ import { IArticle } from '../db/model/article';
 import { trycatch } from '../libs/utils';
 
 @prefix('/article')
-export default class articleController {
+export default class ArticleController {
   @router({
     path: '',
     method: 'get'

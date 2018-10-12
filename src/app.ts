@@ -1,6 +1,7 @@
 import * as Koa from 'koa';
 import * as cors from '@koa/cors';
 import * as BodyParser from 'koa-bodyparser';
+import * as KoaBody from 'koa-body';
 import Router from './middleware/router';
 import DbConnection from './db';
 import config from './config';
@@ -17,6 +18,16 @@ app.use(cors());
 
 // post请求获取参数
 app.use(BodyParser());
+
+// request 获取文件上传
+// app.use(
+//   KoaBody({
+//     multipart: true,
+//     formidable: {
+//       maxFieldsSize: config.get('upload')['maxUploadSize'] * 1024 * 1024
+//     }
+//   })
+// );
 
 // 注册路由
 router.register(`${__dirname}/controller`);

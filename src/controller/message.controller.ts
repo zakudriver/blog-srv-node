@@ -41,14 +41,14 @@ export default class MessageController {
   }
 
   @router({
-    path: '',
-    method: 'post'
+    path: '/get',
+    method: 'get'
   })
   @log
   async addMessage(ctx: Koa.Context) {
-    const req = ctx.request.body;
+    // const req = ctx.request.body;
 
-    const newMessage = new MessageMod(req);
+    const newMessage = new MessageMod({email:'11111',text:'2222'});
     await trycatch(
       ctx,
       async () => {
@@ -75,7 +75,7 @@ export default class MessageController {
     await trycatch(
       ctx,
       async () => {
-        await MessageMod.findByIdAndRemove(req._id);
+        await MessageMod.findByIdAndDelete(req._id);
         ctx.body = {
           code: 0,
           data: null,

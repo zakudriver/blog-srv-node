@@ -9,7 +9,7 @@ import config from '../config';
 const jwt = config.get('jwt');
 
 @prefix('/user')
-export default class userController {
+export default class UserController {
   @router({
     path: '/auth',
     method: 'post'

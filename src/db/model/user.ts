@@ -16,6 +16,9 @@ const UserSchema = new Mongoose.Schema(
       type: String,
       required: true
     },
+    avatar: {
+      type: String
+    }
     // createTime: {
     //   type: Date,
     //   default: Date.now
