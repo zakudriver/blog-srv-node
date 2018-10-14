@@ -3,23 +3,32 @@
   // 悬停以查看现有属性的描述。
   // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "launch",
+  "configurations": [{
+      "name": "Launch to node",
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/dist/app.js",
-      "args": [],
+      // "args": ["-r tsconfig-paths/register"],
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector"
+      "protocol": "inspector",
+      "outFiles": ["${workspaceRoot}/dist/**/*.js"],
+      "runtimeExecutable": "${workspaceRoot}/node_modules/nodemon/bin/nodemon.js", // 不用全局安装nodemon
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "sourceMaps": true,
+      "restart": true
     },
     {
-      "name": "ts:debug",
       "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/src/app.ts",
-      "args": ["-r", "ts-node/register", "${relativeFile}"],
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+      "request": "attach",
+      "name": "Attach to node",
+      "restart": true,
+      "port": 9229
     }
   ]
 }

@@ -1,10 +1,23 @@
 {
-  "watch": ["src"],
-  "ext": "ts",
-  "ignore": ["src/**/*.spec.ts"],
-  "exec": "ts-node src/app.ts",
-  "env": {
-    "NODE_ENV": "development",
-    "PORT": ""
-  }
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    ".vscode",
+    ".idea",
+    "node_modules/",
+    "src/"
+  ],
+  "verbose": true,
+  "execMap": {
+    "": "node",
+    "js": "node --harmony"
+  },
+  "events": {
+    "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
+  },
+  "watch": [
+    "dist"
+  ],
+  "ext": "js json",
+  "legacy-watch": false
 }

@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import * as cors from '@koa/cors';
-import * as BodyParser from 'koa-bodyparser';
+// import * as BodyParser from 'koa-bodyparser';
 import * as KoaBody from 'koa-body';
 import Router from './middleware/router';
 import DbConnection from './db';
@@ -17,17 +17,19 @@ DbConnection(config.get('mongo')[config.get('env')]);
 app.use(cors());
 
 // post请求获取参数
-app.use(BodyParser());
+// app.use(BodyParser());
 
 // request 获取文件上传
-// app.use(
-//   KoaBody({
-//     multipart: true,
-//     formidable: {
-//       maxFieldsSize: config.get('upload')['maxUploadSize'] * 1024 * 1024
-//     }
-//   })
-// );
+app.use(
+  KoaBody({
+    multipart: true,
+    patchKoa: true,
+    strict:false, // 如果为true，不解析GET,HEAD,DELETE请求
+    formidable: {
+      maxFieldsSize: config.get('upload')['maxUploadSize'] * 1024 * 1024
+    }
+  })
+);
 
 // 注册路由
 router.register(`${__dirname}/controller`);

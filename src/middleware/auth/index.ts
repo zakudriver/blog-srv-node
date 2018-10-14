@@ -24,10 +24,9 @@ export function signToken(userId: string) {
 export const verifyToken: Router.IMiddleware = async (ctx, next) => {
   const overtimeRes = {
     code: 1,
-    data: null,
+    data: {},
     msg: '登陆失效，请重新登陆'
   };
-
   if (!ctx.request.headers.authorization) {
     return (ctx.body = overtimeRes);
   }
@@ -57,10 +56,7 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
         await next();
       } else if (difference > jwt.settlingtime && difference <= jwt.overtime) {
         // 重置过期时间
-        await redis.setAsync(
-          clientToken.payload.userId,
-          JSON.stringify({ token: clientTokenStr, time: new Date().getTime() })
-        );
+        await redis.setAsync(clientToken.payload.userId, JSON.stringify({ token: clientTokenStr, time: new Date().getTime() }));
         const results = await redis.pexpireAsync(clientToken.payload.userId, jwt.overtime - jwt.settlingtime);
         if (results) {
           await next();

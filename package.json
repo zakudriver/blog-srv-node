@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon",
+    "build": "rm -rf ./dist && tsc --watch",
     "start": "tsc && node dist/app.js",
     "watch": "webpack-watch-server --config ./build/webpack.config.js",
     "build:dev": "webpack --config ./build/webpack.config.js"
@@ -22,7 +23,6 @@
     "jsonwebtoken": "^8.3.0",
     "koa": "^2.5.2",
     "koa-body": "^4.0.4",
-    "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "mongoose": "^5.3.2",
     "nconf": "^0.10.0",
@@ -32,7 +32,6 @@
     "@types/glob": "^5.0.35",
     "@types/jsonwebtoken": "^7.2.8",
     "@types/koa": "^2.0.46",
-    "@types/koa-bodyparser": "^5.0.1",
     "@types/koa-router": "^7.0.31",
     "@types/koa__cors": "^2.2.3",
     "@types/mongoose": "^5.2.12",
