@@ -3,19 +3,21 @@
   // 悬停以查看现有属性的描述。
   // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
-  "configurations": [{
+  "configurations": [
+    {
       "name": "Launch to node",
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/dist/app.js",
-      // "args": ["-r tsconfig-paths/register"],
+      "args": ["rm -rf ./dist && tsc --watch"],
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
       "outFiles": ["${workspaceRoot}/dist/**/*.js"],
-      "runtimeExecutable": "${workspaceRoot}/node_modules/nodemon/bin/nodemon.js", // 不用全局安装nodemon
-      "runtimeArgs": [
-        "--nolazy"
-      ],
+      "runtimeExecutable": "${workspaceRoot}/node_modules/nodemon/bin/nodemon.js", // 不用全局安装nodemon,mac环境
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/nodemon.cmd" // 不用全局安装nodemon,windows环境执行
+      },
+      "runtimeArgs": ["--nolazy"],
       "env": {
         "NODE_ENV": "development"
       },
