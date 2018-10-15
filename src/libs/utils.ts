@@ -36,6 +36,6 @@ export async function trycatch(ctx: Koa.Context, func: () => void, errMsg?: stri
   }
 }
 
-export function cwdDir(dir: string) {
+export function cwdResolve(dir: string) {
   return path.resolve(process.cwd() + dir);
 }

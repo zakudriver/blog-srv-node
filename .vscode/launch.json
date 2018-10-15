@@ -9,7 +9,6 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/dist/app.js",
-      "args": ["rm -rf ./dist && tsc --watch"],
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
       "outFiles": ["${workspaceRoot}/dist/**/*.js"],
