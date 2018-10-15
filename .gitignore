@@ -5,6 +5,7 @@ npm-debug*
 /.cache-loader
 /.awcache
 /deploy
+upload/
 
 .DS_Store
 .env.local
