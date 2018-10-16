@@ -4,6 +4,7 @@ import { prefix, router, log, required, auth } from '../middleware/router/decora
 import { cwdResolve, trycatch } from '../libs/utils';
 import config from '../config';
 import { fs_stat } from '../libs/promisify';
+import { UploadMod } from '../db/model';
 
 @prefix('/upload')
 export default class UploadController {
@@ -31,14 +32,21 @@ export default class UploadController {
         const statResult = await fs_stat(dir);
 
         if (statResult.isDirectory()) {
-          const file = ctx.request.files!.file;
+          const file = ctx.request.files!.uploadFile;
           const reader = fs.createReadStream(file.path);
           const ext = file.name.split('.').pop();
-          const upStream = fs.createWriteStream(`${dir}/article_${new Date().getTime()}.${ext}`);
-          reader.pipe(upStream);
+          const uploadName = `article_${new Date().getTime()}.${ext}`;
+          const writer = fs.createWriteStream(`${dir}/${uploadName}`);
+
+          reader.pipe(writer);
+
+          const uploadUrl = `upload/article/${uploadName}`;
+          const newUpload = new UploadMod({ name: uploadName, url: uploadUrl });
+          await newUpload.save();
+
           ctx.body = {
             code: 0,
-            data: null,
+            data: 'http://127.0.0.1:8999/' + uploadUrl,
             msg: 'upload successful'
           };
         }

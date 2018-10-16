@@ -23,7 +23,7 @@ export function signToken(userId: string) {
  */
 export const verifyToken: Router.IMiddleware = async (ctx, next) => {
   const overtimeRes = {
-    code: 1,
+    code: 110,
     data: {},
     msg: '登陆失效，请重新登陆'
   };

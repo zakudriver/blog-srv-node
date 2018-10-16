@@ -1,13 +1,16 @@
 import * as mongoose from 'mongoose';
 
-export interface IMessage extends mongoose.Document {
-  email: string;
-  text: string;
-  time: string;
+export interface IUpload extends mongoose.Document {
+  name: string;
+  url: string;
 }
 
-const messageSchema = new mongoose.Schema(
+const uploadSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true
+    },
     url: {
       type: String,
       required: true
@@ -21,4 +24,4 @@ const messageSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model<IMessage>('Message', messageSchema);
+export default mongoose.model<IUpload>('Upload', uploadSchema);

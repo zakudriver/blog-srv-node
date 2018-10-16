@@ -6,6 +6,7 @@ export interface IArticle extends mongoose.Document {
   content: string;
   createTime: string;
   updateTime: string;
+  uploads?: object[];
 }
 
 const articleSchema = new mongoose.Schema(
@@ -23,21 +24,16 @@ const articleSchema = new mongoose.Schema(
     content: {
       type: String
     },
-    uploads: {
-      type: Array
-    },
+    uploads: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Upload'
+      }
+    ],
     isFormal: {
       type: Boolean,
       required: true
     }
-    // createTime: {
-    //   type: Date,
-    //   default: Date.now
-    // },
-    // updateTime: {
-    //   type: Date,
-    //   default: Date.now
-    // }
   },
   {
     versionKey: false,
