@@ -15,7 +15,7 @@ export default class UploadController {
   @auth
   @log
   async uploadFile(ctx: Koa.Context) {
-    console.log(ctx.request.files);
+    // console.log(ctx.request.files);
     const dir = cwdResolve(config.get('upload').uploadDir.article);
 
     if (!ctx.request.files) {
@@ -40,13 +40,13 @@ export default class UploadController {
 
           reader.pipe(writer);
 
-          const uploadUrl = `upload/article/${uploadName}`;
+          const uploadUrl = `http://127.0.0.1:8999/upload/article/${uploadName}`;
           const newUpload = new UploadMod({ name: uploadName, url: uploadUrl });
-          await newUpload.save();
+          const results = await newUpload.save();
 
           ctx.body = {
             code: 0,
-            data: 'http://127.0.0.1:8999/' + uploadUrl,
+            data: results,
             msg: 'upload successful'
           };
         }

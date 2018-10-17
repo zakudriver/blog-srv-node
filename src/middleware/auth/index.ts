@@ -25,7 +25,7 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
   const overtimeRes = {
     code: 110,
     data: {},
-    msg: '登陆失效，请重新登陆'
+    msg: 'Logon failure'
   };
   if (!ctx.request.headers.authorization) {
     return (ctx.body = overtimeRes);

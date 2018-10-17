@@ -17,7 +17,7 @@ export default class ArticleController {
     await trycatch(
       ctx,
       async () => {
-        const results = await ArticleMod.findById(req._id);
+        const results = await ArticleMod.findById(req._id).populate('uploads', ['url', 'name']);
 
         ctx.body = {
           code: 0,
