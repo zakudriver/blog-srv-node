@@ -11,6 +11,10 @@ export interface IArticle extends mongoose.Document {
 
 const articleSchema = new mongoose.Schema(
   {
+    uid: {
+      type: String,
+      required: true
+    },
     title: {
       type: String,
       required: true,

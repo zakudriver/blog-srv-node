@@ -14,7 +14,7 @@ export default class ClassificationController {
   @log
   async getClassification(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
-      const results = await ClassificationMod.find().sort({ order: 1 });
+      const results = await ClassificationMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
       ctx.body = {
         code: 0,
         data: results,
@@ -31,7 +31,9 @@ export default class ClassificationController {
   @required(['name'])
   @log
   async addClassification(ctx: Koa.Context) {
-    const req = ctx.request.body as { name: string };
+    const req = ctx.request.body as { name: string; uid: string };
+    req.uid = ctx.request.uid;
+
     const newClassification = new ClassificationMod(req);
     await trycatch(
       ctx,

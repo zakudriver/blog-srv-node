@@ -172,20 +172,24 @@
 // console.log(a.a == 1 && a.a == 2 && a.a == 3);
 
 // (a == 1 && a == 2 && a == 3)
-import { performance } from 'perf_hooks';
+// import { performance } from 'perf_hooks';
 
-// console.time('start');
-const a = performance.now();
+// // console.time('start');
+// const a = performance.now();
 
-let arr = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
-let obj = { a: 1, b: 2, c: 3 };
+// let arr = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3];
+// let obj = { a: 1, b: 2, c: 3 };
 
-for (let i = 0; i < 10000000; i++) {
-  // let test = { ...obj };
-  let test = Object.assign(obj,{});
-  // let test = arr.concat();
-}
+// for (let i = 0; i < 10000000; i++) {
+//   // let test = { ...obj };
+//   let test = Object.assign(obj,{});
+//   // let test = arr.concat();
+// }
 
-console.log(performance.now() - a);
+// console.log(performance.now() - a);
 
+import * as fs from 'fs';
 
+fs.readdir('./upload/article', (err, files) => {
+  console.log(files);
+});

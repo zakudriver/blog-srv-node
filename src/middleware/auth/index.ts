@@ -52,6 +52,7 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
     terminalLog(`token过期时间：${over}`);
 
     if (redisToken.token === clientTokenStr) {
+      ctx.request.uid = clientToken.payload.userId;
       if (difference <= jwt.settlingtime) {
         await next();
       } else if (difference > jwt.settlingtime && difference <= jwt.overtime) {

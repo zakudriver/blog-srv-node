@@ -42,14 +42,14 @@ export default class ArticleController {
     limit = +limit;
     condition = +condition;
 
-    let find = {};
+    let find: { isFormal?: boolean; className?: string; uid: string } = { uid: ctx.request.uid };
     if (condition === 1) {
-      find = { isFormal: true };
+      find.isFormal = true;
     } else if (condition === 2) {
-      find = { isFormal: false };
+      find.isFormal = false;
     }
     if (className) {
-      Object.assign(find, { className });
+      find.className = className;
     }
 
     await trycatch(
@@ -100,7 +100,10 @@ export default class ArticleController {
       classId: string;
       isFormal: boolean;
       time: string;
+      uid: string;
     };
+    req.uid = ctx.request.uid;
+    
     const isFormal = req.isFormal;
     const newArticle = new ArticleMod(req);
     await trycatch(

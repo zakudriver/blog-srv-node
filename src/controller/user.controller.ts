@@ -77,8 +77,8 @@ export default class UserController {
   @log
   async signIn(ctx: Koa.Context) {
     const newUser = new UserMod({
-      // username: '',
-      // password: ''
+      username: 'guest',
+      password: cryptPwd('123')
     });
 
     await trycatch(ctx, async () => {

@@ -8,6 +8,10 @@ export interface IMessage extends mongoose.Document {
 
 const messageSchema = new mongoose.Schema(
   {
+    uid: {
+      type: String,
+      required: true
+    },
     email: {
       type: String,
       required: true
@@ -15,7 +19,7 @@ const messageSchema = new mongoose.Schema(
     text: {
       type: String,
       required: true
-    },
+    }
   },
   {
     versionKey: false,

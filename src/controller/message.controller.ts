@@ -21,7 +21,7 @@ export default class MessageController {
       ctx,
       async () => {
         const count = await MessageMod.countDocuments();
-        const results = await MessageMod.find({})
+        const results = await MessageMod.find({ uid: ctx.request.uid })
           .skip((index - 1) * limit)
           .limit(limit)
           .sort({ time: -1 })
@@ -46,9 +46,10 @@ export default class MessageController {
   })
   @log
   async addMessage(ctx: Koa.Context) {
-    // const req = ctx.request.body;
+    // const req = ctx.request.body as { email: string; text: string; uid: string };
+    // req.uid = ctx.request.uid;
 
-    const newMessage = new MessageMod({email:'11111',text:'2222'});
+    const newMessage = new MessageMod({ email: '11111', text: '2222', uid: ctx.request.uid });
     await trycatch(
       ctx,
       async () => {

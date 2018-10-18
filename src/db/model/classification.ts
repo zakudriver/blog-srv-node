@@ -9,6 +9,10 @@ export interface IClassification extends mongoose.Document {
 
 const classificationSchema = new mongoose.Schema(
   {
+    uid: {
+      type: String,
+      required: true
+    },
     name: {
       type: String,
       unique: true,
@@ -17,7 +21,7 @@ const classificationSchema = new mongoose.Schema(
     order: {
       type: Number
       // unique: true
-    },
+    }
     // createTime: {
     //   type: Date,
     //   default: Date.now
