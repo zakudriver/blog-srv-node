@@ -54,4 +54,30 @@ export default class UploadController {
       'upload failed'
     );
   }
+
+  @router({
+    path: '',
+    method: 'delete'
+  })
+  @auth
+  @required(['_id'])
+  @log
+  async removeUpload(ctx: Koa.Context) {
+    const req = ctx.request.body as { _id: string };
+
+    await trycatch(
+      ctx,
+      async () => {
+        await UploadMod.findByIdAndRemove(req._id);
+        const results = await UploadMod.find();
+
+        ctx.body = {
+          code: 0,
+          data: results,
+          msg: 'uploadfile remove successfully'
+        };
+      },
+      'uploadfile remove failed'
+    );
+  }
 }
