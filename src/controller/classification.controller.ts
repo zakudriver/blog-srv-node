@@ -39,7 +39,7 @@ export default class ClassificationController {
       ctx,
       async () => {
         await newClassification.save();
-        const results = await ClassificationMod.find().sort({ order: 1 });
+        const results = await ClassificationMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
 
         ctx.body = {
           code: 0,
@@ -65,7 +65,9 @@ export default class ClassificationController {
       async () => {
         let results;
         if (Array.isArray(req)) {
-          const updateArr: any[] = req.map(i => ClassificationMod.findByIdAndUpdate(i._id, { $set: { order: i.order } }));
+          const updateArr: any[] = req.map(i =>
+            ClassificationMod.findByIdAndUpdate(i._id, { $set: { order: i.order } })
+          );
           results = await Promise.all(updateArr);
         } else {
           await ClassificationMod.findByIdAndUpdate(req._id, { $set: { name: req.name } });
