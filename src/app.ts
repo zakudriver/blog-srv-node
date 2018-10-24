@@ -1,12 +1,13 @@
+require('module-alias/register');
 import * as Koa from 'koa';
 import * as cors from '@koa/cors';
 import * as KoaStatic from 'koa-static';
 import * as KoaBody from 'koa-body';
-import Router from './middleware/router';
-import DbConnection from './db';
-import config from './config';
-import { terminalLog } from './libs/log';
-import { cwdResolve } from './libs/utils';
+import Router from 'src/middleware/router';
+import DbConnection from 'src/db';
+import config from 'src/config';
+import { terminalLog } from 'src/libs/log';
+import { cwdResolve } from 'src/libs/utils';
 
 const app = new Koa();
 const router = new Router(app);

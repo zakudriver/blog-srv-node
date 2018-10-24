@@ -1,11 +1,11 @@
-import * as mongoose from 'mongoose';
+import * as Mongoose from 'mongoose';
 
-export interface IUpload extends mongoose.Document {
+export interface IUpload extends Mongoose.Document {
   name: string;
   url: string;
 }
 
-const uploadSchema = new mongoose.Schema(
+const uploadSchema = new Mongoose.Schema(
   {
     name: {
       type: String,
@@ -24,4 +24,4 @@ const uploadSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model<IUpload>('Upload', uploadSchema);
+export default Mongoose.model<IUpload>('Upload', uploadSchema);

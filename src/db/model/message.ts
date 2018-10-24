@@ -1,12 +1,12 @@
-import * as mongoose from 'mongoose';
+import * as Mongoose from 'mongoose';
 
-export interface IMessage extends mongoose.Document {
+export interface IMessage extends Mongoose.Document {
   email: string;
   text: string;
   time: string;
 }
 
-const messageSchema = new mongoose.Schema(
+const messageSchema = new Mongoose.Schema(
   {
     uid: {
       type: String,
@@ -29,4 +29,4 @@ const messageSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model<IMessage>('Message', messageSchema);
+export default Mongoose.model<IMessage>('Message', messageSchema);

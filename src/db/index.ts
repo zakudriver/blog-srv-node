@@ -4,12 +4,16 @@ import UserMod, { IUser } from './model/user';
 import MessageMod, { IMessage } from './model/message';
 import ArticleMod, { IArticle } from './model/article';
 import ClassificationMod, { IClassification } from './model/classification';
+import UploadMod, { IUpload } from './model/upload';
+import RootMod, { IRoot } from './model/root';
 
 interface Database {
   UserModel: Mongoose.Model<IUser>;
   MessageModel: Mongoose.Model<IMessage>;
   ArticleModel: Mongoose.Model<IArticle>;
   ClassificationModel: Mongoose.Model<IClassification>;
+  UploadModel: Mongoose.Model<IUpload>;
+  RootModel: Mongoose.Model<IRoot>;
 }
 
 export default function DbConnection(dbURL: string): Database {
@@ -36,6 +40,8 @@ export default function DbConnection(dbURL: string): Database {
     UserModel: UserMod,
     MessageModel: MessageMod,
     ArticleModel: ArticleMod,
-    ClassificationModel: ClassificationMod
+    ClassificationModel: ClassificationMod,
+    UploadModel: UploadMod,
+    RootModel: RootMod
   };
 }

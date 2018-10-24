@@ -6,5 +6,6 @@ declare module 'Koa' {
   }
   interface Request extends BaseRequest {
     uid: string;
+    root: boolean;
   }
 }

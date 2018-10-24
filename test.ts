@@ -188,8 +188,15 @@
 
 // console.log(performance.now() - a);
 
-import * as fs from 'fs';
+// import * as fs from 'fs';
 
-fs.readdir('./upload/article', (err, files) => {
-  console.log(files);
-});
+// fs.readdir('./upload/article', (err, files) => {
+//   console.log(files);
+// });
+
+let r = 10,
+  g = 10,
+  b = 10;
+
+console.log(((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1));
+console.log(parseInt('a', 16));

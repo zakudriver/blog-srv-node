@@ -1,7 +1,7 @@
 import * as Koa from 'koa';
 import { prefix, router, log, required, auth } from '../middleware/router/decorators';
 import { ClassificationMod } from '../db/model';
-import { IClassification } from '@src/db/model/classification';
+import { IClassification } from '../db/model/classification';
 import { trycatch } from '../libs/utils';
 
 @prefix('/classification')

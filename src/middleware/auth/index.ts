@@ -3,6 +3,7 @@ import * as Jwt from 'jsonwebtoken';
 import redis from '../../redis';
 import { errLog, terminalLog } from '../../libs/log';
 import config from '../../config';
+import { Response } from '../../constants/enum';
 
 const jwt = config.get('jwt');
 
@@ -23,8 +24,8 @@ export function signToken(userId: string) {
  */
 export const verifyToken: Router.IMiddleware = async (ctx, next) => {
   const overtimeRes = {
-    code: 110,
-    data: {},
+    code: Response.overtime,
+    data: null,
     msg: 'Logon failure'
   };
   if (!ctx.request.headers.authorization) {
@@ -52,6 +53,7 @@ export const verifyToken: Router.IMiddleware = async (ctx, next) => {
     terminalLog(`token过期时间：${over}`);
 
     if (redisToken.token === clientTokenStr) {
+      // 获取uid
       ctx.request.uid = clientToken.payload.userId;
       if (difference <= jwt.settlingtime) {
         await next();

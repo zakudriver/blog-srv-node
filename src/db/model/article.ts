@@ -1,6 +1,6 @@
-import * as mongoose from 'mongoose';
+import * as Mongoose from 'mongoose';
 
-export interface IArticle extends mongoose.Document {
+export interface IArticle extends Mongoose.Document {
   title: string;
   className: string;
   content: string;
@@ -9,7 +9,7 @@ export interface IArticle extends mongoose.Document {
   uploads?: object[];
 }
 
-const articleSchema = new mongoose.Schema(
+const articleSchema = new Mongoose.Schema(
   {
     uid: {
       type: String,
@@ -21,7 +21,7 @@ const articleSchema = new mongoose.Schema(
       unique: true
     },
     className: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'Classification'
     },
@@ -30,7 +30,7 @@ const articleSchema = new mongoose.Schema(
     },
     uploads: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Mongoose.Schema.Types.ObjectId,
         ref: 'Upload'
       }
     ],
@@ -45,4 +45,4 @@ const articleSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model<IArticle>('Article', articleSchema);
+export default Mongoose.model<IArticle>('Article', articleSchema);
