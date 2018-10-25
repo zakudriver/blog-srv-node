@@ -3,7 +3,6 @@ import { prefix, router, log, required, auth } from '../middleware/router/decora
 import { MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
 import * as http from 'http';
-import { http_request } from '../libs/promisify';
 
 @prefix('/message')
 export default class MessageController {

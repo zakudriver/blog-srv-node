@@ -7,10 +7,11 @@ export interface IRoot extends Mongoose.Document {
 
 const RootSchema = new Mongoose.Schema(
   {
-    users: [
+    user: [
       {
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        unique: true
       }
     ]
   },

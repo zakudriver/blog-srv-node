@@ -1,13 +1,12 @@
-require('module-alias/register');
 import * as Koa from 'koa';
 import * as cors from '@koa/cors';
 import * as KoaStatic from 'koa-static';
 import * as KoaBody from 'koa-body';
-import Router from 'src/middleware/router';
-import DbConnection from 'src/db';
-import config from 'src/config';
-import { terminalLog } from 'src/libs/log';
-import { cwdResolve } from 'src/libs/utils';
+import Router from './middleware/router';
+import DbConnection from './db';
+import config from './config';
+import { terminalLog } from './libs/log';
+import { root } from './middleware/root';
 
 const app = new Koa();
 const router = new Router(app);
@@ -35,6 +34,9 @@ app.use(
     }
   })
 );
+
+// 检查token验证root user
+app.use(root);
 
 // 注册路由
 router.register(`${__dirname}/controller`);

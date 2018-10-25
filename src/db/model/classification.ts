@@ -19,8 +19,9 @@ const classificationSchema = new Mongoose.Schema(
       required: true
     },
     order: {
-      type: Number
+      type: Number,
       // unique: true
+      default: 0
     }
     // createTime: {
     //   type: Date,

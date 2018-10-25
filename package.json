@@ -16,7 +16,8 @@
   "keywords": [
     "typescript",
     "koa",
-    "mongodb"
+    "mongodb",
+    "redis"
   ],
   "dependencies": {
     "@koa/cors": "^2.2.2",
@@ -26,7 +27,6 @@
     "koa-body": "^4.0.4",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
-    "module-alias": "^2.1.0",
     "mongoose": "^5.3.2",
     "nconf": "^0.10.0",
     "redis": "^2.8.0"
@@ -50,8 +50,5 @@
     "typescript": "^3.0.3",
     "webpack": "^4.19.0",
     "webpack-watch-server": "^1.2.1"
-  },
-  "_moduleAliases": {
-    "src": "./dist"
   }
 }

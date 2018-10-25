@@ -4,7 +4,7 @@
   // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [{
-      "name": "Launch to node",
+      "name": "Nodemon to node",
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/dist/app.js",
@@ -24,12 +24,12 @@
       "restart": true,
       "stopOnEntry": false
     },
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach to node",
-      "restart": true,
-      "port": 9229
-    }
+    // {
+    //   "type": "node",
+    //   "request": "attach",
+    //   "name": "Attach to node",
+    //   "restart": true,
+    //   "port": 9229
+    // }
   ]
 }
