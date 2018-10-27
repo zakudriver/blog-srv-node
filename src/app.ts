@@ -6,7 +6,7 @@ import Router from './middleware/router';
 import DbConnection from './db';
 import config from './config';
 import { terminalLog } from './libs/log';
-import { root } from './middleware/root';
+import { token } from './middleware/token';
 
 const app = new Koa();
 const router = new Router(app);
@@ -35,8 +35,8 @@ app.use(
   })
 );
 
-// 检查token验证root user
-app.use(root);
+// 检查token
+app.use(token);
 
 // 注册路由
 router.register(`${__dirname}/controller`);

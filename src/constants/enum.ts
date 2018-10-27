@@ -4,3 +4,9 @@ export enum Response {
   BDerror = 2,
   overtime = 110
 }
+
+export enum Privilege {
+  root = 0,
+  admin = 1,
+  guest = 2
+}

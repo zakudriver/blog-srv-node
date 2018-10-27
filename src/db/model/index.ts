@@ -3,6 +3,6 @@ import MessageMod from './message';
 import ArticleMod from './article';
 import ClassificationMod from './classification';
 import UploadMod from './upload';
-import RootMod from './root';
+import AdminMod from './admin';
 
-export { UserMod, MessageMod, ArticleMod, ClassificationMod, UploadMod, RootMod };
+export { UserMod, MessageMod, ArticleMod, ClassificationMod, UploadMod, AdminMod };

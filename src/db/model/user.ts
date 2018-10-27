@@ -3,6 +3,7 @@ import * as Mongoose from 'mongoose';
 export interface IUser extends Mongoose.Document {
   username: string;
   password: string;
+  avatar: string;
 }
 
 const UserSchema = new Mongoose.Schema(
@@ -18,6 +19,10 @@ const UserSchema = new Mongoose.Schema(
     },
     avatar: {
       type: String
+    },
+    privilege: {
+      type: Number,
+      required: true
     }
     // createTime: {
     //   type: Date,
