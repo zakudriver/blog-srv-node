@@ -3,7 +3,7 @@ import * as Jwt from 'jsonwebtoken';
 import redis from '../../redis';
 import { errLog, terminalLog } from '../../libs/log';
 import config from '../../config';
-import { Response } from '../../constants/enum';
+import { Status } from '../../constants/enum';
 
 const jwt = config.get('jwt');
 
@@ -24,7 +24,7 @@ export function signToken(userId: string) {
  */
 export const verifyToken: Router.IMiddleware = async (ctx, next) => {
   const overtimeRes = {
-    code: Response.overtime,
+    code: Status.overtime,
     data: null,
     msg: 'Logon failure'
   };

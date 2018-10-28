@@ -3,6 +3,7 @@ import * as Crypto from 'crypto';
 import * as path from 'path';
 import config from '../config';
 import { errLog } from '../libs/log';
+import { Status } from '../constants/enum';
 
 /**
  * 密码MD5加密
@@ -28,7 +29,7 @@ export async function trycatch(ctx: Koa.Context, func: () => void, errMsg?: stri
     await func();
   } catch (err) {
     ctx.body = {
-      code: 2,
+      code: Status.BDerror,
       data: null,
       msg: errMsg || err.errmsg
     };

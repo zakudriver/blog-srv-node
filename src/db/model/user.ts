@@ -4,6 +4,7 @@ export interface IUser extends Mongoose.Document {
   username: string;
   password: string;
   avatar: string;
+  privilege: number;
 }
 
 const UserSchema = new Mongoose.Schema(

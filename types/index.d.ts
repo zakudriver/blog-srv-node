@@ -4,8 +4,12 @@ declare module 'Koa' {
   export interface BaseContext {
     request: Request;
   }
-  interface Request extends BaseRequest {
+  export interface Request extends BaseRequest {
     uid: string;
-    root: boolean;
+    user: IUser;
+  }
+  export interface IUser {
+    _id: string;
+    privilege: number;
   }
 }

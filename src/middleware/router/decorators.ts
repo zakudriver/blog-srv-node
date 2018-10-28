@@ -1,8 +1,10 @@
 import * as Router from 'koa-router';
 import MyRouter, { routerPrefixSymbol } from './index';
 import { verifyToken } from '../auth';
+import { verifyPrivilege } from '../privilege';
 import { isToArray } from '../../libs';
 import { sucLog, keyword } from '../../libs/log';
+import { Status } from '../../constants/enum';
 
 /**
  * 封装函数
@@ -61,9 +63,9 @@ function logger(): Router.IMiddleware {
 
     const startTime = process.hrtime();
     sucLog(
-      `${keyword('magenta')('→')} (ID:${currentRequestID}) ${keyword('cyan')(ctx.method)} ${keyword('yellow')(
-        ctx.url
-      )} ${ctx.body ? keyword('orange')(ctx.body) : ''}`
+      `${keyword('magenta')('→')} (ID:${currentRequestID}) ${keyword('cyan')(ctx.method)} ${keyword('yellow')(ctx.url)} ${
+        ctx.body ? keyword('orange')(ctx.body) : ''
+      }`
     );
     await next();
 
@@ -90,7 +92,7 @@ function requireder(rules: string[]): Router.IMiddleware {
       for (let name of rules) {
         if (!ctx.query[name]) {
           return (ctx.body = {
-            code: 1,
+            code: Status.error,
             data: null,
             msg: `${ctx.method} Request query: ${name} required`
           });
@@ -100,7 +102,7 @@ function requireder(rules: string[]): Router.IMiddleware {
       for (let name of rules) {
         if (!(<any>ctx.request.body)[name]) {
           return (ctx.body = {
-            code: 1,
+            code: Status.error,
             data: null,
             msg: `${ctx.method} Request params: ${name} required`
           });
@@ -116,3 +118,9 @@ function requireder(rules: string[]): Router.IMiddleware {
  * 验证 装饰器
  */
 export const auth = buildMethodDecorator(verifyToken);
+
+/**
+ * @
+ * 权限 装饰器
+ */
+export const privilege = (privilegeType: number) => buildMethodDecorator(verifyPrivilege(privilegeType));

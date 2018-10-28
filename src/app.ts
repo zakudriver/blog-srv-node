@@ -7,6 +7,7 @@ import DbConnection from './db';
 import config from './config';
 import { terminalLog } from './libs/log';
 import { token } from './middleware/token';
+import { verifyUser } from './middleware/privilege';
 
 const app = new Koa();
 const router = new Router(app);
@@ -37,6 +38,9 @@ app.use(
 
 // 检查token
 app.use(token);
+
+// 验证用户获取用户权限，必须在token中间件后面
+app.use(verifyUser);
 
 // 注册路由
 router.register(`${__dirname}/controller`);

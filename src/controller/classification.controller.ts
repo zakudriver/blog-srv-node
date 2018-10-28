@@ -1,8 +1,9 @@
 import * as Koa from 'koa';
-import { prefix, router, log, required, auth } from '../middleware/router/decorators';
+import { prefix, router, log, required, auth, privilege } from '../middleware/router/decorators';
 import { ClassificationMod } from '../db/model';
 import { IClassification } from '../db/model/classification';
 import { trycatch } from '../libs/utils';
+import { Privilege } from '../constants/enum';
 
 @prefix('/classification')
 export default class ClassificationController {
@@ -11,6 +12,7 @@ export default class ClassificationController {
     method: 'get'
   })
   @auth
+  @privilege(Privilege.root)
   @log
   async getClassification(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
@@ -65,9 +67,7 @@ export default class ClassificationController {
       async () => {
         let results;
         if (Array.isArray(req)) {
-          const updateArr: any[] = req.map(i =>
-            ClassificationMod.findByIdAndUpdate(i._id, { $set: { order: i.order } })
-          );
+          const updateArr: any[] = req.map(i => ClassificationMod.findByIdAndUpdate(i._id, { $set: { order: i.order } }));
           results = await Promise.all(updateArr);
         } else {
           await ClassificationMod.findByIdAndUpdate(req._id, { $set: { name: req.name } });
