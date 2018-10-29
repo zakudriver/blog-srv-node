@@ -10,6 +10,6 @@ declare module 'Koa' {
   }
   export interface IUser {
     _id: string;
-    privilege: number;
+    permission: number;
   }
 }

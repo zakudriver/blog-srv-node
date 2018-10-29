@@ -1,7 +1,8 @@
 import * as Koa from 'koa';
-import { prefix, router, log, required, auth } from '../middleware/router/decorators';
+import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
 import { MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
+import { Permission, Status } from '../constants/enum';
 import * as http from 'http';
 
 @prefix('/message')
@@ -29,7 +30,7 @@ export default class MessageController {
           .exec();
 
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: {
             rows: results,
             count
@@ -87,7 +88,7 @@ export default class MessageController {
     //   async () => {
     //     await newMessage.save();
     //     ctx.body = {
-    //       code: 0,
+    //       code: Status.ok,
     //       data: null,
     //       msg: 'message sent successfully'
     //     };
@@ -100,8 +101,9 @@ export default class MessageController {
     path: '',
     method: 'delete'
   })
-  @required(['_id'])
   @auth
+  @required(['_id'])
+  @permission(Permission.root)
   @log
   async removeMessage(ctx: Koa.Context) {
     const req = <{ _id: string }>ctx.request.body;
@@ -110,7 +112,7 @@ export default class MessageController {
       async () => {
         await MessageMod.findByIdAndDelete(req._id);
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: null,
           msg: 'message deleted successfully'
         };

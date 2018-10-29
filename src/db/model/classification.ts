@@ -1,6 +1,7 @@
 import * as Mongoose from 'mongoose';
 
 export interface IClassification extends Mongoose.Document {
+  uid: string;
   name: string;
   order: number;
   createTime: string;

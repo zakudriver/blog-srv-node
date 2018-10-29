@@ -1,6 +1,6 @@
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
-import { Status, Privilege } from '../../constants/enum';
+import { Status, Permission } from '../../constants/enum';
 import { trycatch } from '../../libs/utils';
 import { UserMod } from '../../db/model';
 
@@ -26,16 +26,14 @@ export const verifyUser: Koa.Middleware = async (ctx, next) => {
           await findUser(ctx, uid);
         }
       },
-      'privilege verify failed'
+      'user verify failed'
     );
   }
-  console.log(USER_LIST);
   await next();
 };
 
 async function findUser(ctx: Koa.BaseContext, _id: string) {
   const user = await UserMod.findById(_id);
-  console.log('findUser');
   if (user) {
     ctx.request.user = user;
     USER_LIST.push(user);
@@ -46,29 +44,29 @@ async function findUser(ctx: Koa.BaseContext, _id: string) {
  * 路由中间件 权限验证
  *
  * @export
- * @param {number} privilegeType
+ * @param {number} permissionType
  * @returns {Router.IMiddleware}
  */
-export function verifyPrivilege(privilegeType: number): Router.IMiddleware {
+export function verifyPermission(permissionType: number): Router.IMiddleware {
   return async (ctx, next) => {
     const user = ctx.request.user;
 
     if (user) {
-      const privilege = user.privilege;
-      if (privilegeType === privilege || privilege === Privilege.root) {
+      const permission = user.permission;
+      if (permissionType === permission || permission === Permission.root) {
         await next();
       } else {
         ctx.body = {
-          code: Status.privilege,
+          code: Status.permission,
           data: null,
-          msg: 'insufficient privileges'
+          msg: 'ERROR Permission denied!'
         };
       }
     } else {
       ctx.body = {
         code: Status.bug,
         data: null,
-        msg: 'bug!'
+        msg: 'bug! 请联系开发者'
       };
     }
   };

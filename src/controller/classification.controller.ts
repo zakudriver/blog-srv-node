@@ -1,9 +1,9 @@
 import * as Koa from 'koa';
-import { prefix, router, log, required, auth, privilege } from '../middleware/router/decorators';
+import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
 import { ClassificationMod } from '../db/model';
 import { IClassification } from '../db/model/classification';
 import { trycatch } from '../libs/utils';
-import { Privilege } from '../constants/enum';
+import { Permission, Status } from '../constants/enum';
 
 @prefix('/classification')
 export default class ClassificationController {
@@ -12,13 +12,12 @@ export default class ClassificationController {
     method: 'get'
   })
   @auth
-  @privilege(Privilege.root)
   @log
   async getClassification(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
       const results = await ClassificationMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
       ctx.body = {
-        code: 0,
+        code: Status.ok,
         data: results,
         msg: 'classification get successfully'
       };
@@ -31,6 +30,7 @@ export default class ClassificationController {
   })
   @auth
   @required(['name'])
+  @permission(Permission.root)
   @log
   async addClassification(ctx: Koa.Context) {
     const req = ctx.request.body as { name: string; uid: string };
@@ -44,7 +44,7 @@ export default class ClassificationController {
         const results = await ClassificationMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
 
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: results,
           msg: 'classification add successfully'
         };
@@ -58,6 +58,7 @@ export default class ClassificationController {
     method: 'put'
   })
   @auth
+  @permission(Permission.root)
   @log
   async updateClassification(ctx: Koa.Context) {
     const req = ctx.request.body as IClassification[] | IClassification;
@@ -74,7 +75,7 @@ export default class ClassificationController {
           results = await ClassificationMod.find().sort({ order: 1 });
         }
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: results,
           msg: 'classification update successfully'
         };
@@ -89,6 +90,7 @@ export default class ClassificationController {
   })
   @auth
   @required(['_id'])
+  @permission(Permission.root)
   @log
   async removeClassification(ctx: Koa.Context) {
     const req = ctx.request.body as { _id: string };
@@ -100,7 +102,7 @@ export default class ClassificationController {
         const results = await ClassificationMod.find().sort({ order: 1 });
 
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: results,
           msg: 'classification remove successfully'
         };

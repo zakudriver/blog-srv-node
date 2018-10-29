@@ -4,7 +4,7 @@ export interface IUser extends Mongoose.Document {
   username: string;
   password: string;
   avatar: string;
-  privilege: number;
+  permission: number;
 }
 
 const UserSchema = new Mongoose.Schema(
@@ -21,7 +21,7 @@ const UserSchema = new Mongoose.Schema(
     avatar: {
       type: String
     },
-    privilege: {
+    permission: {
       type: Number,
       required: true
     }

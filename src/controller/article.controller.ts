@@ -1,8 +1,8 @@
 import * as Koa from 'koa';
-import { prefix, router, log, required, auth } from '../middleware/router/decorators';
+import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
 import { ArticleMod } from '../db/model';
-import { IArticle } from '../db/model/article';
 import { trycatch } from '../libs/utils';
+import { Permission, Status } from '../constants/enum';
 
 @prefix('/article')
 export default class ArticleController {
@@ -20,7 +20,7 @@ export default class ArticleController {
         const results = await ArticleMod.findById(req._id).populate('uploads', ['url', 'name']);
 
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: results,
           msg: 'article,hold well '
         };
@@ -68,7 +68,7 @@ export default class ArticleController {
         });
 
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: {
             rows: results,
             count
@@ -92,18 +92,12 @@ export default class ArticleController {
     method: 'post'
   })
   @auth
+  @permission(Permission.root)
   @log
   async addArticle(ctx: Koa.Context) {
-    const req = ctx.request.body as {
-      title: string;
-      content: string;
-      classId: string;
-      isFormal: boolean;
-      time: string;
-      uid: string;
-    };
+    const req = ctx.request.body;
     req.uid = ctx.request.uid;
-    
+
     const isFormal = req.isFormal;
     const newArticle = new ArticleMod(req);
     await trycatch(
@@ -111,7 +105,7 @@ export default class ArticleController {
       async () => {
         await newArticle.save();
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: req,
           msg: `article ${isFormal ? 'pulish' : 'save'} successfully`
         };
@@ -126,6 +120,7 @@ export default class ArticleController {
   })
   @auth
   @required(['_id'])
+  @permission(Permission.root)
   @log
   async removeArticle(ctx: Koa.Context) {
     const req = <{ _id: string }>ctx.request.body;
@@ -134,7 +129,7 @@ export default class ArticleController {
       async () => {
         await ArticleMod.findByIdAndRemove(req._id);
         ctx.body = {
-          code: 0,
+          code: Status.ok,
           data: null,
           msg: 'article deleted successfully'
         };
@@ -149,9 +144,10 @@ export default class ArticleController {
   })
   @auth
   @required(['_id'])
+  @permission(Permission.root)
   @log
   async updateArticle(ctx: Koa.Context) {
-    const req = ctx.request.body as IArticle;
+    const req = ctx.request.body;
 
     await trycatch(
       ctx,

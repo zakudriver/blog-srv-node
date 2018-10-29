@@ -1,10 +1,12 @@
 import * as fs from 'fs';
 import * as Koa from 'koa';
-import { prefix, router, log, required, auth } from '../middleware/router/decorators';
+import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
 import { cwdResolve, trycatch } from '../libs/utils';
 import config from '../config';
 import { fs_stat, fs_unlink } from '../libs/promisify';
 import { UploadMod } from '../db/model';
+import { Permission, Status } from '../constants/enum';
+
 const dir = cwdResolve(config.get('upload').uploadDir.article);
 
 @prefix('/upload')
@@ -14,6 +16,7 @@ export default class UploadController {
     method: 'post'
   })
   @auth
+  @permission(Permission.root)
   @log
   async uploadFile(ctx: Koa.Context) {
     // console.log(ctx.request.files);
@@ -21,7 +24,7 @@ export default class UploadController {
 
     if (!ctx.request.files) {
       return (ctx.body = {
-        code: 1,
+        code: Status.error,
         data: null,
         msg: 'upload failed'
       });
@@ -46,7 +49,7 @@ export default class UploadController {
           const results = await newUpload.save();
 
           ctx.body = {
-            code: 0,
+            code: Status.error,
             data: results,
             msg: 'upload successful'
           };
@@ -62,6 +65,7 @@ export default class UploadController {
   })
   @auth
   @required(['_id'])
+  @permission(Permission.root)
   @log
   async removeUpload(ctx: Koa.Context) {
     const req = ctx.request.body as { _id: string };
@@ -76,13 +80,13 @@ export default class UploadController {
           await fs_unlink(dir + '/' + target.name);
 
           ctx.body = {
-            code: 0,
+            code: Status.ok,
             data: null,
             msg: 'uploadfile remove successfully'
           };
-        }else{
+        } else {
           ctx.body = {
-            code: 1,
+            code: Status.error,
             data: null,
             msg: 'uploadfile remove failed, file not found'
           };

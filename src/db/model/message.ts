@@ -1,6 +1,7 @@
 import * as Mongoose from 'mongoose';
 
 export interface IMessage extends Mongoose.Document {
+  uid: string;
   email: string;
   text: string;
   time: string;

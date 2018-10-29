@@ -1,7 +1,7 @@
 import * as Router from 'koa-router';
 import MyRouter, { routerPrefixSymbol } from './index';
 import { verifyToken } from '../auth';
-import { verifyPrivilege } from '../privilege';
+import { verifyPermission } from '../permission';
 import { isToArray } from '../../libs';
 import { sucLog, keyword } from '../../libs/log';
 import { Status } from '../../constants/enum';
@@ -123,4 +123,4 @@ export const auth = buildMethodDecorator(verifyToken);
  * @
  * 权限 装饰器
  */
-export const privilege = (privilegeType: number) => buildMethodDecorator(verifyPrivilege(privilegeType));
+export const permission = (permissionType: number) => buildMethodDecorator(verifyPermission(permissionType));

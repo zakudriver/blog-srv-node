@@ -7,7 +7,7 @@ import DbConnection from './db';
 import config from './config';
 import { terminalLog } from './libs/log';
 import { token } from './middleware/token';
-import { verifyUser } from './middleware/privilege';
+import { verifyUser } from './middleware/permission';
 
 const app = new Koa();
 const router = new Router(app);

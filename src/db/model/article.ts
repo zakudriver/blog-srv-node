@@ -1,12 +1,14 @@
 import * as Mongoose from 'mongoose';
 
 export interface IArticle extends Mongoose.Document {
+  uid: string;
   title: string;
   className: string;
   content: string;
   createTime: string;
   updateTime: string;
   uploads?: object[];
+  isFormal: boolean;
 }
 
 const articleSchema = new Mongoose.Schema(
