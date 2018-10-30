@@ -34,7 +34,12 @@
   "upload": {
     "maxUploadSize": 10,
     "uploadDir": {
-      "article": "/upload/article"
+      "article": "/upload/article",
+      "user": "/upload/user"
+    },
+    "host": {
+      "development": "http://127.0.0.1:8999",
+      "production": ""
     }
   }
 }

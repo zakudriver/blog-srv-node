@@ -42,7 +42,6 @@ export default class UserController {
         if (results) {
           if (cryptPwd(req.password) === results.password) {
             const token = signToken(results._id);
-            delete results.password
             ctx.body = {
               code: Status.ok,
               data: results,
@@ -84,14 +83,18 @@ export default class UserController {
       permission: 0
     });
 
-    await trycatch(ctx, async () => {
-      const results = await newUser.save();
-      ctx.body = {
-        code: Status.ok,
-        data: results,
-        msg: 'register successful'
-      };
-    });
+    await trycatch(
+      ctx,
+      async () => {
+        const results = await newUser.save();
+        ctx.body = {
+          code: Status.ok,
+          data: results,
+          msg: 'register successful'
+        };
+      },
+      'register failed'
+    );
   }
 
   @router({
@@ -103,14 +106,85 @@ export default class UserController {
   @log
   async updateUser(ctx: Koa.Context) {
     const req = ctx.request.body;
+    const uid = ctx.request.uid;
 
-    await trycatch(ctx, async () => {
-      await UserMod.findByIdAndUpdate(req._id, { $set: req });
-      ctx.body = {
-        code: Status.ok,
-        data: null,
-        msg: 'user update successful'
-      };
-    });
+    // if (req.oldPassword && req.newPassword) {
+    //   await trycatch(
+    //     ctx,
+    //     async () => {
+    //       const user = await UserMod.findById(uid);
+    //       if (user) {
+    //         console.log(cryptPwd(req.oldPassword));
+    //         console.log(user!.password);
+
+    //         if (cryptPwd(req.oldPassword) === user!.password) {
+    //           req.password = cryptPwd(req.newPassword);
+    //         } else {
+    //           return (ctx.body = {
+    //             code: Status.error,
+    //             data: null,
+    //             msg: 'oldPassword error'
+    //           });
+    //         }
+    //       }
+    //     },
+    //     'password update failed'
+    //   );
+    // }
+
+    await trycatch(
+      ctx,
+      async () => {
+        if (req.oldPassword && req.newPassword) {
+          const user = await UserMod.findById(uid);
+          if (user) {
+            if (cryptPwd(req.oldPassword) === user!.password) {
+              req.password = cryptPwd(req.newPassword);
+            } else {
+              return (ctx.body = {
+                code: Status.error,
+                data: null,
+                msg: 'oldPassword error'
+              });
+            }
+          }
+        }
+
+        const results = await UserMod.findByIdAndUpdate(uid, { $set: req });
+        if (results) {
+          ctx.body = {
+            code: Status.ok,
+            data: results,
+            msg: 'user modify successful'
+          };
+        }
+      },
+      'user modify failed'
+    );
+  }
+
+  @router({
+    path: '/info',
+    method: 'get'
+  })
+  @auth
+  @log
+  async getUserInfo(ctx: Koa.Context) {
+    const uid = ctx.request.uid;
+
+    await trycatch(
+      ctx,
+      async () => {
+        const results = await UserMod.findById(uid, { username: 1, avatar: 1, permission: 1 });
+        if (results) {
+          ctx.body = {
+            code: Status.ok,
+            data: results,
+            msg: 'get user info successful'
+          };
+        }
+      },
+      'get user info failed'
+    );
   }
 }
