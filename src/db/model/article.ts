@@ -36,6 +36,11 @@ const articleSchema = new Mongoose.Schema(
         ref: 'Upload'
       }
     ],
+    read: {
+      type: Number,
+      default: 0,
+      required: true
+    },
     isFormal: {
       type: Boolean,
       required: true
