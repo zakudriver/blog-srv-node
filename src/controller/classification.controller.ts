@@ -11,11 +11,10 @@ export default class ClassificationController {
     path: '',
     method: 'get'
   })
-  @auth
   @log
   async getClassification(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
-      const results = await ClassificationMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
+      const results = await ClassificationMod.find({}).sort({ order: 1 });
       ctx.body = {
         code: Status.ok,
         data: results,

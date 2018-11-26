@@ -23,6 +23,11 @@ const classificationSchema = new Mongoose.Schema(
       type: Number,
       // unique: true
       default: 0
+    },
+    color: {
+      type: String,
+      required: true,
+      default: '#333'
     }
     // createTime: {
     //   type: Date,
