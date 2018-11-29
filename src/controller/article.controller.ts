@@ -3,6 +3,7 @@ import { prefix, router, log, required, auth, permission } from '../middleware/r
 import { ArticleMod } from '../db/model';
 import { trycatch } from '../libs/utils';
 import { Permission, Status } from '../constants/enum';
+import { IArticleMessage } from 'src/db/model/article';
 
 @prefix('/article')
 export default class ArticleController {
@@ -161,6 +162,34 @@ export default class ArticleController {
         };
       },
       'article update failed'
+    );
+  }
+
+  @router({
+    path: '/message',
+    method: 'post'
+  })
+  @required(['_id', 'name', 'email', 'text'])
+  @log
+  async sendReply(ctx: Koa.Context) {
+    const req = ctx.request.body;
+
+    await trycatch(
+      ctx,
+      async () => {
+        await ArticleMod.findByIdAndUpdate(req._id, {
+          $push: {
+            message: req
+          }
+        });
+
+        ctx.body = {
+          code: 0,
+          data: null,
+          msg: 'message send successfully'
+        };
+      },
+      'message send failed'
     );
   }
 }

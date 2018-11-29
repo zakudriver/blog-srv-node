@@ -6,6 +6,7 @@ import ArticleMod, { IArticle } from './model/article';
 import ClassificationMod, { IClassification } from './model/classification';
 import UploadMod, { IUpload } from './model/upload';
 import AdminConfigMod, { IAdminConfig } from './model/adminConfig';
+import FrontConfigMod, { IFrontConfig } from './model/frontConfig';
 
 interface Database {
   UserModel: Mongoose.Model<IUser>;
@@ -14,6 +15,7 @@ interface Database {
   ClassificationModel: Mongoose.Model<IClassification>;
   UploadModel: Mongoose.Model<IUpload>;
   AdminConfigModel: Mongoose.Model<IAdminConfig>;
+  FrontConfigModel: Mongoose.Model<IFrontConfig>;
 }
 
 export default function DbConnection(dbURL: string): Database {
@@ -42,6 +44,7 @@ export default function DbConnection(dbURL: string): Database {
     ArticleModel: ArticleMod,
     ClassificationModel: ClassificationMod,
     UploadModel: UploadMod,
-    AdminConfigModel: AdminConfigMod
+    AdminConfigModel: AdminConfigMod,
+    FrontConfigModel: FrontConfigMod
   };
 }

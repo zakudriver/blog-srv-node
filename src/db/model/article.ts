@@ -9,6 +9,13 @@ export interface IArticle extends Mongoose.Document {
   updateTime: string;
   uploads?: object[];
   isFormal: boolean;
+  message?: IArticleMessage[];
+}
+
+export interface IArticleMessage {
+  name: string;
+  email: string;
+  text: string;
 }
 
 const articleSchema = new Mongoose.Schema(
@@ -44,6 +51,9 @@ const articleSchema = new Mongoose.Schema(
     isFormal: {
       type: Boolean,
       required: true
+    },
+    message: {
+      type: Array
     }
   },
   {

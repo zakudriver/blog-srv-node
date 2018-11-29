@@ -1,6 +1,11 @@
 import * as Mongoose from 'mongoose';
 
-export interface IAdminConfig extends Mongoose.Document {}
+export interface IAdminConfig extends Mongoose.Document {
+  title: string;
+  primaryColor: string;
+  drawerColor: string;
+  drawerWidth: number;
+}
 
 const AdminConfigSchema = new Mongoose.Schema(
   {
