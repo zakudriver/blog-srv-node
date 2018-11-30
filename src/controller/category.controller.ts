@@ -1,24 +1,24 @@
 import * as Koa from 'koa';
 import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
-import { CategoriesMod } from '../db/model';
-import { ICategories } from '../db/model/categories';
+import { CategoryMod } from '../db/model';
+import { ICategory } from '../db/model/category';
 import { trycatch } from '../libs/utils';
 import { Permission, Status } from '../constants/enum';
 
-@prefix('/categories')
-export default class CategoriesController {
+@prefix('/category')
+export default class CategoryController {
   @router({
     path: '',
     method: 'get'
   })
   @log
-  async getCategories(ctx: Koa.Context) {
+  async getCategory(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
-      const results = await CategoriesMod.find({}).sort({ order: 1 });
+      const results = await CategoryMod.find({}).sort({ order: 1 });
       ctx.body = {
         code: Status.ok,
         data: results,
-        msg: 'categories get successfully'
+        msg: 'category get successfully'
       };
     });
   }
@@ -31,24 +31,24 @@ export default class CategoriesController {
   @required(['name'])
   @permission(Permission.root)
   @log
-  async addCategories(ctx: Koa.Context) {
+  async addCategory(ctx: Koa.Context) {
     const req = ctx.request.body as { name: string; uid: string };
     req.uid = ctx.request.uid;
 
-    const newCategories = new CategoriesMod(req);
+    const newCategory = new CategoryMod(req);
     await trycatch(
       ctx,
       async () => {
-        await newCategories.save();
-        const results = await CategoriesMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
+        await newCategory.save();
+        const results = await CategoryMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
 
         ctx.body = {
           code: Status.ok,
           data: results,
-          msg: 'categories add successfully'
+          msg: 'category add successfully'
         };
       },
-      'categories add failed'
+      'category add failed'
     );
   }
 
@@ -59,27 +59,27 @@ export default class CategoriesController {
   @auth
   @permission(Permission.root)
   @log
-  async updateCategories(ctx: Koa.Context) {
-    const req = ctx.request.body as ICategories[] | ICategories;
+  async updateCategory(ctx: Koa.Context) {
+    const req = ctx.request.body as ICategory[] | ICategory;
 
     await trycatch(
       ctx,
       async () => {
         let results;
         if (Array.isArray(req)) {
-          const updateArr: any[] = req.map(i => CategoriesMod.findByIdAndUpdate(i._id, { $set: { order: i.order } }));
+          const updateArr: any[] = req.map(i => CategoryMod.findByIdAndUpdate(i._id, { $set: { order: i.order } }));
           results = await Promise.all(updateArr);
         } else {
-          await CategoriesMod.findByIdAndUpdate(req._id, { $set: { name: req.name } });
-          results = await CategoriesMod.find().sort({ order: 1 });
+          await CategoryMod.findByIdAndUpdate(req._id, { $set: { name: req.name } });
+          results = await CategoryMod.find().sort({ order: 1 });
         }
         ctx.body = {
           code: Status.ok,
           data: results,
-          msg: 'categories update successfully'
+          msg: 'category update successfully'
         };
       },
-      'categories update failed'
+      'category update failed'
     );
   }
 
@@ -91,22 +91,22 @@ export default class CategoriesController {
   @required(['_id'])
   @permission(Permission.root)
   @log
-  async removeCategories(ctx: Koa.Context) {
+  async removeCategory(ctx: Koa.Context) {
     const req = ctx.request.body as { _id: string };
 
     await trycatch(
       ctx,
       async () => {
-        await CategoriesMod.findByIdAndRemove(req._id);
-        const results = await CategoriesMod.find().sort({ order: 1 });
+        await CategoryMod.findByIdAndRemove(req._id);
+        const results = await CategoryMod.find().sort({ order: 1 });
 
         ctx.body = {
           code: Status.ok,
           data: results,
-          msg: 'categories remove successfully'
+          msg: 'category remove successfully'
         };
       },
-      'categories remove failed'
+      'category remove failed'
     );
   }
 }
