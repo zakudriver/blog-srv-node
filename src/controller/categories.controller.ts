@@ -1,24 +1,24 @@
 import * as Koa from 'koa';
 import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
-import { ClassificationMod } from '../db/model';
-import { IClassification } from '../db/model/classification';
+import { CategoriesMod } from '../db/model';
+import { ICategories } from '../db/model/categories';
 import { trycatch } from '../libs/utils';
 import { Permission, Status } from '../constants/enum';
 
-@prefix('/classification')
-export default class ClassificationController {
+@prefix('/categories')
+export default class CategoriesController {
   @router({
     path: '',
     method: 'get'
   })
   @log
-  async getClassification(ctx: Koa.Context) {
+  async getCategories(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
-      const results = await ClassificationMod.find({}).sort({ order: 1 });
+      const results = await CategoriesMod.find({}).sort({ order: 1 });
       ctx.body = {
         code: Status.ok,
         data: results,
-        msg: 'classification get successfully'
+        msg: 'categories get successfully'
       };
     });
   }
@@ -31,24 +31,24 @@ export default class ClassificationController {
   @required(['name'])
   @permission(Permission.root)
   @log
-  async addClassification(ctx: Koa.Context) {
+  async addCategories(ctx: Koa.Context) {
     const req = ctx.request.body as { name: string; uid: string };
     req.uid = ctx.request.uid;
 
-    const newClassification = new ClassificationMod(req);
+    const newCategories = new CategoriesMod(req);
     await trycatch(
       ctx,
       async () => {
-        await newClassification.save();
-        const results = await ClassificationMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
+        await newCategories.save();
+        const results = await CategoriesMod.find({ uid: ctx.request.uid }).sort({ order: 1 });
 
         ctx.body = {
           code: Status.ok,
           data: results,
-          msg: 'classification add successfully'
+          msg: 'categories add successfully'
         };
       },
-      'classification add failed'
+      'categories add failed'
     );
   }
 
@@ -59,27 +59,27 @@ export default class ClassificationController {
   @auth
   @permission(Permission.root)
   @log
-  async updateClassification(ctx: Koa.Context) {
-    const req = ctx.request.body as IClassification[] | IClassification;
+  async updateCategories(ctx: Koa.Context) {
+    const req = ctx.request.body as ICategories[] | ICategories;
 
     await trycatch(
       ctx,
       async () => {
         let results;
         if (Array.isArray(req)) {
-          const updateArr: any[] = req.map(i => ClassificationMod.findByIdAndUpdate(i._id, { $set: { order: i.order } }));
+          const updateArr: any[] = req.map(i => CategoriesMod.findByIdAndUpdate(i._id, { $set: { order: i.order } }));
           results = await Promise.all(updateArr);
         } else {
-          await ClassificationMod.findByIdAndUpdate(req._id, { $set: { name: req.name } });
-          results = await ClassificationMod.find().sort({ order: 1 });
+          await CategoriesMod.findByIdAndUpdate(req._id, { $set: { name: req.name } });
+          results = await CategoriesMod.find().sort({ order: 1 });
         }
         ctx.body = {
           code: Status.ok,
           data: results,
-          msg: 'classification update successfully'
+          msg: 'categories update successfully'
         };
       },
-      'classification update failed'
+      'categories update failed'
     );
   }
 
@@ -91,22 +91,22 @@ export default class ClassificationController {
   @required(['_id'])
   @permission(Permission.root)
   @log
-  async removeClassification(ctx: Koa.Context) {
+  async removeCategories(ctx: Koa.Context) {
     const req = ctx.request.body as { _id: string };
 
     await trycatch(
       ctx,
       async () => {
-        await ClassificationMod.findByIdAndRemove(req._id);
-        const results = await ClassificationMod.find().sort({ order: 1 });
+        await CategoriesMod.findByIdAndRemove(req._id);
+        const results = await CategoriesMod.find().sort({ order: 1 });
 
         ctx.body = {
           code: Status.ok,
           data: results,
-          msg: 'classification remove successfully'
+          msg: 'categories remove successfully'
         };
       },
-      'classification remove failed'
+      'categories remove failed'
     );
   }
 }

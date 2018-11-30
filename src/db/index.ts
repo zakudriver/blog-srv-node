@@ -3,7 +3,7 @@ import { keyword } from '../libs/log';
 import UserMod, { IUser } from './model/user';
 import MessageMod, { IMessage } from './model/message';
 import ArticleMod, { IArticle } from './model/article';
-import ClassificationMod, { IClassification } from './model/classification';
+import CategoriesMod, { ICategories } from './model/categories';
 import UploadMod, { IUpload } from './model/upload';
 import AdminConfigMod, { IAdminConfig } from './model/adminConfig';
 import FrontConfigMod, { IFrontConfig } from './model/frontConfig';
@@ -12,7 +12,7 @@ interface Database {
   UserModel: Mongoose.Model<IUser>;
   MessageModel: Mongoose.Model<IMessage>;
   ArticleModel: Mongoose.Model<IArticle>;
-  ClassificationModel: Mongoose.Model<IClassification>;
+  CategoriesModel: Mongoose.Model<ICategories>;
   UploadModel: Mongoose.Model<IUpload>;
   AdminConfigModel: Mongoose.Model<IAdminConfig>;
   FrontConfigModel: Mongoose.Model<IFrontConfig>;
@@ -42,7 +42,7 @@ export default function DbConnection(dbURL: string): Database {
     UserModel: UserMod,
     MessageModel: MessageMod,
     ArticleModel: ArticleMod,
-    ClassificationModel: ClassificationMod,
+    CategoriesModel: CategoriesMod,
     UploadModel: UploadMod,
     AdminConfigModel: AdminConfigMod,
     FrontConfigModel: FrontConfigMod

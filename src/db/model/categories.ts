@@ -1,6 +1,6 @@
 import * as Mongoose from 'mongoose';
 
-export interface IClassification extends Mongoose.Document {
+export interface ICategories extends Mongoose.Document {
   uid: string;
   name: string;
   order: number;
@@ -8,7 +8,7 @@ export interface IClassification extends Mongoose.Document {
   updateTime: string;
 }
 
-const classificationSchema = new Mongoose.Schema(
+const categoriesSchema = new Mongoose.Schema(
   {
     uid: {
       type: String,
@@ -44,4 +44,4 @@ const classificationSchema = new Mongoose.Schema(
   }
 );
 
-export default Mongoose.model<IClassification>('Classification', classificationSchema);
+export default Mongoose.model<ICategories>('Categories', categoriesSchema);
