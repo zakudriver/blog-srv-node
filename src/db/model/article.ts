@@ -1,12 +1,12 @@
 import * as Mongoose from 'mongoose';
 
 export interface IArticle extends Mongoose.Document {
-  uid: string;
   title: string;
-  className: string;
+  category: string;
   content: string;
   createTime: string;
   updateTime: string;
+  cover?: string;
   uploads?: object[];
   isFormal: boolean;
   message?: IArticleMessage[];
@@ -20,21 +20,20 @@ export interface IArticleMessage {
 
 const articleSchema = new Mongoose.Schema(
   {
-    uid: {
-      type: String,
-      required: true
-    },
     title: {
       type: String,
       required: true,
       unique: true
     },
-    className: {
+    category: {
       type: Mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'Category'
     },
     content: {
+      type: String
+    },
+    cover: {
       type: String
     },
     uploads: [
@@ -52,9 +51,11 @@ const articleSchema = new Mongoose.Schema(
       type: Boolean,
       required: true
     },
-    message: {
-      type: Array
-    }
+    message: [
+      {
+        type: Object
+      }
+    ]
   },
   {
     versionKey: false,

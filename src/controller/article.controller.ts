@@ -19,7 +19,9 @@ export default class ArticleController {
       ctx,
       async () => {
         await ArticleMod.findByIdAndUpdate(req._id, { $inc: { read: 1 } });
-        const results = await ArticleMod.findById(req._id).populate('uploads', ['url', 'name']);
+        const results = await ArticleMod.findById(req._id)
+          .populate('uploads', ['url', 'name'])
+          .populate('Category', 'name');
 
         ctx.body = {
           code: Status.ok,
@@ -37,21 +39,22 @@ export default class ArticleController {
   })
   @auth
   @required(['index', 'limit'])
+  @permission(Permission.root)
   @log
-  async getArticleList(ctx: Koa.Context) {
-    let { index, limit, condition, className } = ctx.query;
+  async getArticleListPro(ctx: Koa.Context) {
+    let { index, limit, condition, category } = ctx.query;
     index = +index;
     limit = +limit;
     condition = +condition;
 
-    let find: { isFormal?: boolean; className?: string; uid: string } = { uid: ctx.request.uid };
+    let find: { isFormal?: boolean; category?: string } = {};
     if (condition === 1) {
       find.isFormal = true;
     } else if (condition === 2) {
       find.isFormal = false;
     }
-    if (className) {
-      find.className = className;
+    if (category) {
+      find.category = category;
     }
 
     await trycatch(
@@ -59,7 +62,7 @@ export default class ArticleController {
       async () => {
         const count = await ArticleMod.countDocuments();
         const results = await ArticleMod.find(find)
-          .populate('className', 'name')
+          .populate('category', 'name')
           .skip((index - 1) * limit)
           .limit(limit)
           .sort({ updateTime: 1 })
@@ -83,6 +86,47 @@ export default class ArticleController {
   }
 
   @router({
+    path: '/list',
+    method: 'get'
+  })
+  @required(['index', 'limit'])
+  @log
+  async getArticleList(ctx: Koa.Context) {
+    let { index, limit, category } = ctx.query;
+    index = +index;
+    limit = +limit;
+
+    let find: { isFormal?: boolean; category?: string } = { isFormal: true };
+    if (category) {
+      find.category = category;
+    }
+
+    await trycatch(
+      ctx,
+      async () => {
+        // const count = await ArticleMod.countDocuments();
+        const results = await ArticleMod.find(find)
+          .populate('category', 'name')
+          .skip((index - 1) * limit)
+          .limit(limit)
+          .sort({ updateTime: 1 })
+          .exec();
+
+        results.forEach(i => {
+          i.content = i.content.substr(0, 300);
+        });
+
+        ctx.body = {
+          code: Status.ok,
+          data: results,
+          msg: 'articles,hold well'
+        };
+      },
+      'articles get failed'
+    );
+  }
+
+  @router({
     path: '/search',
     method: 'get'
   })
@@ -98,7 +142,6 @@ export default class ArticleController {
   @log
   async addArticle(ctx: Koa.Context) {
     const req = ctx.request.body;
-    req.uid = ctx.request.uid;
 
     const isFormal = req.isFormal;
     const newArticle = new ArticleMod(req);

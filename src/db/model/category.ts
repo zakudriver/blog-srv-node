@@ -1,7 +1,6 @@
 import * as Mongoose from 'mongoose';
 
 export interface ICategory extends Mongoose.Document {
-  uid: string;
   name: string;
   order: number;
   createTime: string;
@@ -10,10 +9,6 @@ export interface ICategory extends Mongoose.Document {
 
 const categorySchema = new Mongoose.Schema(
   {
-    uid: {
-      type: String,
-      required: true
-    },
     name: {
       type: String,
       unique: true,
@@ -24,11 +19,11 @@ const categorySchema = new Mongoose.Schema(
       // unique: true
       default: 0
     },
-    color: {
-      type: String,
-      required: true,
-      default: '#333'
-    }
+    // color: {
+    //   type: String,
+    //   required: true,
+    //   default: '#333'
+    // }
     // createTime: {
     //   type: Date,
     //   default: Date.now
