@@ -78,9 +78,8 @@ export default class UserController {
   @log
   async signIn(ctx: Koa.Context) {
     const newUser = new UserMod({
-      username: 'zyhua1122',
-      password: cryptPwd('zyhua248655'),
-      permission: 0
+      username: 'guest',
+      password: cryptPwd('guest')
     });
 
     await trycatch(
@@ -185,6 +184,54 @@ export default class UserController {
         }
       },
       'get user info failed'
+    );
+  }
+
+  @router({
+    path: '/list',
+    method: 'get'
+  })
+  @log
+  async getUserList(ctx: Koa.Context) {
+    await trycatch(
+      ctx,
+      async () => {
+        const count = await UserMod.countDocuments();
+        const results = await UserMod.find({}, { username: 1, avatar: 1, permission: 1 }).sort({ permission: 1 });
+        if (results) {
+          ctx.body = {
+            code: Status.ok,
+            data: {
+              rows: results,
+              count
+            },
+            msg: 'get user list successful'
+          };
+        }
+      },
+      'get user list failed'
+    );
+  }
+
+  @router({
+    path: '/',
+    method: 'delete'
+  })
+  @log
+  async removeUser(ctx: Koa.Context) {
+    const req = <{ _id: string }>ctx.request.body;
+
+    await trycatch(
+      ctx,
+      async () => {
+        await UserMod.findByIdAndRemove(req._id);
+        ctx.body = {
+          code: Status.ok,
+          data: null,
+          msg: 'user deleted successfully'
+        };
+      },
+      'user deleted failed'
     );
   }
 }

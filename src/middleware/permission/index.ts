@@ -53,7 +53,7 @@ export function verifyPermission(permissionType: number): Router.IMiddleware {
 
     if (user) {
       const permission = user.permission;
-      if (permissionType === permission || permission === Permission.root) {
+      if (permissionType >= permission || permission === Permission.root) {
         await next();
       } else {
         ctx.body = {

@@ -1,4 +1,6 @@
 import * as Mongoose from 'mongoose';
+import { IUpload } from './upload';
+import { IMessage } from './message';
 
 export interface IArticle extends Mongoose.Document {
   title: string;
@@ -7,15 +9,9 @@ export interface IArticle extends Mongoose.Document {
   createTime: string;
   updateTime: string;
   cover?: string;
-  uploads?: object[];
+  uploads?: IUpload[];
   isFormal: boolean;
-  message?: IArticleMessage[];
-}
-
-export interface IArticleMessage {
-  name: string;
-  email: string;
-  text: string;
+  message?: IMessage[];
 }
 
 const articleSchema = new Mongoose.Schema(
@@ -53,7 +49,8 @@ const articleSchema = new Mongoose.Schema(
     },
     message: [
       {
-        type: Object
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Message'
       }
     ]
   },

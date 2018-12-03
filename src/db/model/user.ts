@@ -23,7 +23,8 @@ const UserSchema = new Mongoose.Schema(
     },
     permission: {
       type: Number,
-      required: true
+      required: true,
+      default: 2
     }
     // createTime: {
     //   type: Date,

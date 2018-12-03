@@ -1,9 +1,8 @@
 import * as Koa from 'koa';
 import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
-import { ArticleMod } from '../db/model';
+import { ArticleMod, MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
 import { Permission, Status } from '../constants/enum';
-import { IArticleMessage } from 'src/db/model/article';
 
 @prefix('/article')
 export default class ArticleController {
@@ -214,15 +213,17 @@ export default class ArticleController {
   })
   @required(['_id', 'name', 'email', 'text'])
   @log
-  async sendReply(ctx: Koa.Context) {
+  async sendMessage(ctx: Koa.Context) {
     const req = ctx.request.body;
 
     await trycatch(
       ctx,
       async () => {
+        const newMessage = new MessageMod(req);
+        const result = await newMessage.save();
         await ArticleMod.findByIdAndUpdate(req._id, {
           $push: {
-            message: req
+            message: result._id
           }
         });
 
