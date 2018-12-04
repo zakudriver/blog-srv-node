@@ -9,7 +9,7 @@ export interface IMessage extends Mongoose.Document {
 
 const messageSchema = new Mongoose.Schema(
   {
-    uid: {
+    name: {
       type: String,
       required: true
     },

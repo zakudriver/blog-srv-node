@@ -20,7 +20,33 @@ export default class ArticleController {
         await ArticleMod.findByIdAndUpdate(req._id, { $inc: { read: 1 } });
         const results = await ArticleMod.findById(req._id)
           .populate('uploads', ['url', 'name'])
-          .populate('Category', 'name');
+          .populate('category', 'name');
+
+        ctx.body = {
+          code: Status.ok,
+          data: results,
+          msg: 'article,hold well '
+        };
+      },
+      'article get failed'
+    );
+  }
+
+  @router({
+    path: '/pro',
+    method: 'get'
+  })
+  @required(['_id'])
+  @log
+  async getArticleAdmin(ctx: Koa.Context) {
+    const req = ctx.query;
+    await trycatch(
+      ctx,
+      async () => {
+        await ArticleMod.findByIdAndUpdate(req._id, { $inc: { read: 1 } });
+        const results = await ArticleMod.findById(req._id)
+          .populate('uploads', ['url', 'name'])
+          .populate('Category');
 
         ctx.body = {
           code: Status.ok,
@@ -62,6 +88,7 @@ export default class ArticleController {
         const count = await ArticleMod.countDocuments();
         const results = await ArticleMod.find(find)
           .populate('category', 'name')
+          .populate('message')
           .skip((index - 1) * limit)
           .limit(limit)
           .sort({ updateTime: 1 })
@@ -132,13 +159,14 @@ export default class ArticleController {
   @log
   async searchArticle(ctx: Koa.Context) {
     const { category, title, start, end } = ctx.query;
-    console.log(new Date(2018, 12, 1));
+
     await trycatch(ctx, async () => {
       const results = await ArticleMod.find({
         $and: [
           { title: { $regex: new RegExp(title), $options: '$i' } },
           category ? { category } : {},
-          start ? { updateTime: { $lte: new Date(2012, 11, 7) } } : {}
+          start ? { updateTime: { $gte: new Date(start) } } : {},
+          end ? { updateTime: { $lte: new Date(end) } } : {}
         ]
       })
         .populate('category', 'name')
@@ -230,17 +258,19 @@ export default class ArticleController {
     path: '/message',
     method: 'post'
   })
-  @required(['_id', 'name', 'email', 'text'])
+  @required(['_id', 'name', 'email'])
   @log
   async sendMessage(ctx: Koa.Context) {
     const req = ctx.request.body;
+    const _id = req._id;
+    delete req._id;
 
     await trycatch(
       ctx,
       async () => {
         const newMessage = new MessageMod(req);
         const result = await newMessage.save();
-        await ArticleMod.findByIdAndUpdate(req._id, {
+        await ArticleMod.findByIdAndUpdate(_id, {
           $push: {
             message: result._id
           }
