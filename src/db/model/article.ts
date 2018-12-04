@@ -18,8 +18,7 @@ const articleSchema = new Mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     category: {
       type: Mongoose.Schema.Types.ObjectId,

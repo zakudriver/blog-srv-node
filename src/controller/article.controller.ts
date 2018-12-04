@@ -130,7 +130,26 @@ export default class ArticleController {
     method: 'get'
   })
   @log
-  async searchArticle(ctx: Koa.Context) {}
+  async searchArticle(ctx: Koa.Context) {
+    const { category, title, start, end } = ctx.query;
+    console.log(new Date(2018, 12, 1));
+    await trycatch(ctx, async () => {
+      const results = await ArticleMod.find({
+        $and: [
+          { title: { $regex: new RegExp(title), $options: '$i' } },
+          category ? { category } : {},
+          start ? { updateTime: { $lte: new Date(2012, 11, 7) } } : {}
+        ]
+      })
+        .populate('category', 'name')
+        .exec();
+
+      ctx.body = {
+        code: Status.ok,
+        data: results
+      };
+    });
+  }
 
   @router({
     path: '',

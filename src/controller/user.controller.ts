@@ -36,20 +36,21 @@ export default class UserController {
     await trycatch(
       ctx,
       async () => {
-        const results = await UserMod.findOne({
+        const result = await UserMod.findOne({
           username: req.username
         });
-        if (results) {
-          if (cryptPwd(req.password) === results.password) {
-            const token = signToken(results._id);
+        if (result) {
+          if (cryptPwd(req.password) === result.password) {
+            const token = signToken(result._id);
+            delete result.password;
             ctx.body = {
               code: Status.ok,
-              data: results,
+              data: result,
               msg: 'login successful',
               token
             };
             // token存redis
-            const _id = results._id.toString();
+            const _id = result._id.toString();
             await redis.setAsync(_id, JSON.stringify({ token, time: new Date().getTime() }));
             await redis.pexpireAsync(_id, jwt.overtime);
           } else {
