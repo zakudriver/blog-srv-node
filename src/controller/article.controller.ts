@@ -43,7 +43,7 @@ export default class ArticleController {
     await trycatch(
       ctx,
       async () => {
-        await ArticleMod.findByIdAndUpdate(req._id, { $inc: { read: 1 } });
+        // await ArticleMod.findByIdAndUpdate(req._id, { $inc: { read: 1 } });
         const results = await ArticleMod.findById(req._id)
           .populate('uploads', ['url', 'name'])
           .populate('Category');
@@ -159,16 +159,20 @@ export default class ArticleController {
   @log
   async searchArticle(ctx: Koa.Context) {
     const { category, title, start, end } = ctx.query;
+    const titleSearch = !category && !start && !end;
 
     await trycatch(ctx, async () => {
-      const results = await ArticleMod.find({
-        $and: [
-          { title: { $regex: new RegExp(title), $options: '$i' } },
-          category ? { category } : {},
-          start ? { updateTime: { $gte: new Date(start) } } : {},
-          end ? { updateTime: { $lte: new Date(end) } } : {}
-        ]
-      })
+      const results = await ArticleMod.find(
+        {
+          $and: [
+            { title: { $regex: new RegExp(title), $options: '$i' } },
+            category ? { category } : {},
+            start ? { updateTime: { $gte: new Date(start) } } : {},
+            end ? { updateTime: { $lte: new Date(end) } } : {}
+          ]
+        },
+        titleSearch ? { title: 1 } : {}
+      )
         .populate('category', 'name')
         .exec();
 
