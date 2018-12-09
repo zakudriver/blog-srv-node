@@ -131,7 +131,7 @@ export default class ArticleController {
       ctx,
       async () => {
         // const count = await ArticleMod.countDocuments();
-        const results = await ArticleMod.find(find)
+        const results = await ArticleMod.find(find, { message: 0, uploads: 0, isFormal: 0 })
           .populate('category', 'name')
           .skip((index - 1) * limit)
           .limit(limit)
@@ -159,7 +159,8 @@ export default class ArticleController {
   @log
   async searchArticle(ctx: Koa.Context) {
     const { category, title, start, end } = ctx.query;
-    const titleSearch = !category && !start && !end;
+    const titleSearch = !category && !start && !end && title;
+    console.log(titleSearch);
 
     await trycatch(ctx, async () => {
       const results = await ArticleMod.find(
@@ -171,7 +172,7 @@ export default class ArticleController {
             end ? { updateTime: { $lte: new Date(end) } } : {}
           ]
         },
-        titleSearch ? { title: 1 } : {}
+        titleSearch ? { title: 1 } : { message: 0, uploads: 0, isFormal: 0 }
       )
         .populate('category', 'name')
         .exec();

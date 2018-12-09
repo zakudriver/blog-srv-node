@@ -14,7 +14,7 @@ export default class CategoryController {
   @log
   async getCategory(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
-      const results = await CategoryMod.find({}).sort({ order: 1 });
+      const results = await CategoryMod.find({}, { _id: 1, name: 1 }).sort({ order: 1 });
       ctx.body = {
         code: Status.ok,
         data: results,
