@@ -1,6 +1,11 @@
 import * as Mongoose from 'mongoose';
 
-export interface IFrontConfig extends Mongoose.Document {}
+export interface IFrontConfig extends Mongoose.Document {
+  avatar: string;
+  name: string;
+  profile: string;
+  description: string;
+}
 
 const FrontConfigSchema = new Mongoose.Schema(
   {
@@ -11,6 +16,9 @@ const FrontConfigSchema = new Mongoose.Schema(
     name: {
       type: String,
       required: true
+    },
+    profile: {
+      type: String
     },
     description: {
       type: String,
