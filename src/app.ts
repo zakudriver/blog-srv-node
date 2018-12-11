@@ -19,6 +19,7 @@ DbConnection(config.get('mongo')[config.get('env')]);
 // socketIO
 socketIO(app);
 
+console.log(app.context.socketio)
 // 跨域
 app.use(cors());
 

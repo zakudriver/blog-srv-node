@@ -9,11 +9,11 @@ export const socketIO = (app: Koa) => {
 
   const io = IO(server);
 
-  io.on('connection', () => {
+  io.on('connection', socket => {
     terminalLog('SOCKET.IO connecting');
-    io.emit('news', { hello: 'world' });
 
-    app.io = io;
+    app.context.io = io;
+    app.context.socketio = socket;
   });
 
   server.listen(config.get('wspost'));

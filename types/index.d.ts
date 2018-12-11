@@ -4,8 +4,10 @@ import * as IO from 'socket.io';
 declare module 'Koa' {
   export interface BaseContext {
     request: Request;
+    io: IO.Server;
+    socketio: IO.Socket;
   }
-  export interface Request extends BaseRequest {
+  export interface Request extends Koa.BaseRequest {
     uid: string;
     user: IUser;
   }
@@ -13,11 +15,5 @@ declare module 'Koa' {
   export interface IUser {
     _id: string;
     permission: number;
-  }
-
-  export namespace Koa {
-    interface BaseContext {
-      io: any;
-    }
   }
 }
