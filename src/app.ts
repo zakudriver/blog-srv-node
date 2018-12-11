@@ -8,12 +8,16 @@ import config from './config';
 import { terminalLog } from './libs/log';
 import { token } from './middleware/token';
 import { verifyUser } from './middleware/permission';
+import { socketIO } from './socket';
 
-const app = new Koa();
+export const app = new Koa();
 const router = new Router(app);
 
 // 连接数据库
 DbConnection(config.get('mongo')[config.get('env')]);
+
+// socketIO
+socketIO(app);
 
 // 跨域
 app.use(cors());

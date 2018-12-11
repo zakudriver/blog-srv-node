@@ -1,5 +1,6 @@
 {
   "port": "8999",
+  "wspost": "9999",
   "log": {
     "log_name": "log",
     "log_path": "logs/"
