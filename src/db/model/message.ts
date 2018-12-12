@@ -20,6 +20,10 @@ const messageSchema = new Mongoose.Schema(
     text: {
       type: String,
       required: true
+    },
+    article:{
+      type: Mongoose.Schema.Types.ObjectId,
+      ref: 'Article'
     }
   },
   {

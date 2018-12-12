@@ -40,6 +40,7 @@ export default class ArticleController {
   @log
   async getArticleAdmin(ctx: Koa.Context) {
     const req = ctx.query;
+
     await trycatch(
       ctx,
       async () => {
@@ -71,6 +72,9 @@ export default class ArticleController {
     index = +index;
     limit = +limit;
     condition = +condition;
+
+    ctx.io.emit('Message', { test: 'test' });
+    // console.log(ctx.io)
 
     let find: { isFormal?: boolean; category?: string } = {};
     if (condition === 1) {
@@ -267,8 +271,7 @@ export default class ArticleController {
   @log
   async sendMessage(ctx: Koa.Context) {
     const req = ctx.request.body;
-    const _id = req._id;
-    delete req._id;
+    const _id = req.article;
 
     await trycatch(
       ctx,

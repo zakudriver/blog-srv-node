@@ -1,11 +1,12 @@
 import * as Koa from 'koa';
 import * as IO from 'socket.io';
+import { SocketIO } from '../src/socket';
 
 declare module 'Koa' {
   export interface BaseContext {
     request: Request;
-    io: IO.Server;
-    socketio: IO.Socket;
+    io: SocketIO;
+    // socketio: IO.Socket;
   }
   export interface Request extends Koa.BaseRequest {
     uid: string;

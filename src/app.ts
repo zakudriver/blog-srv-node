@@ -16,10 +16,9 @@ const router = new Router(app);
 // 连接数据库
 DbConnection(config.get('mongo')[config.get('env')]);
 
-// socketIO
-socketIO(app);
+// 连接socketIO并注入app.context
+socketIO(app)
 
-console.log(app.context.socketio)
 // 跨域
 app.use(cors());
 
