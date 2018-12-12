@@ -6,7 +6,6 @@ import config from '../config';
 import { terminalLog } from '../libs/log';
 
 const EventEmitter = event.EventEmitter;
-const ready = new EventEmitter();
 
 type Event = 'Message' | 'SubscribeMessage';
 
@@ -29,10 +28,10 @@ export class SocketIO {
   }
 
   private _registerEvent() {
-    this._ready.on(this._taskName, () => {
+    this._ready.on(this._taskName, socket => {
       if (this._tasks.length) {
         this._tasks.forEach(i => {
-          this._socket!.on(i.event, i.cb);
+          socket.on(i.event, i.cb);
         });
       }
     });
@@ -43,7 +42,7 @@ export class SocketIO {
       terminalLog(`SOCKET.IO connecting ->>>> ${socket.id}  ${socket.conn.remoteAddress}`);
       this._socketid = socket.id;
       this._socket = socket;
-      this._ready.emit(this._taskName);
+      this._ready.emit(this._taskName, socket);
     });
   }
 
