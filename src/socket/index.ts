@@ -1,21 +1,41 @@
 import * as http from 'http';
+import * as event from 'events';
 import * as Koa from 'koa';
 import * as IO from 'socket.io';
 import config from '../config';
 import { terminalLog } from '../libs/log';
 
+const EventEmitter = event.EventEmitter;
+const ready = new EventEmitter();
+
 type Event = 'Message' | 'SubscribeMessage';
 
 export class SocketIO {
+  private _taskName = Symbol('run');
+  private _tasks: { event: Event; cb: (params: any) => void }[] = [];
+  private _ready: event.EventEmitter;
+
   private _io: IO.Server;
   private _socket: IO.Socket | null = null;
   private _socketid: string = '';
   constructor(app: Koa) {
     const server = http.createServer(app.callback());
     this._io = IO(server);
-
     this._connection();
     server.listen(config.get('wspost'));
+
+    this._ready = new EventEmitter();
+    this._registerEvent();
+  }
+
+  private _registerEvent() {
+    this._ready.on(this._taskName, () => {
+      if (this._tasks.length) {
+        this._tasks.forEach(i => {
+          this._socket!.on(i.event, i.cb);
+        });
+      }
+    });
   }
 
   private _connection() {
@@ -23,6 +43,7 @@ export class SocketIO {
       terminalLog(`SOCKET.IO connecting ->>>> ${socket.id}  ${socket.conn.remoteAddress}`);
       this._socketid = socket.id;
       this._socket = socket;
+      this._ready.emit(this._taskName);
     });
   }
 
@@ -30,11 +51,15 @@ export class SocketIO {
     this._io.to(this._socketid).emit(event, data);
   }
 
-  on(event: Event) {
-    this._socket!.on(event, (d: any) => {
-      console.log('SubscribeMessage');
-      console.log(d);
-    });
+  on(event: Event, cb: (params: any) => void) {
+    if (this._socket) {
+      this._socket.on(event, cb);
+    } else {
+      this._tasks.push({
+        event,
+        cb
+      });
+    }
   }
 }
 
@@ -46,5 +71,7 @@ export class SocketIO {
  */
 export function socketIO(app: Koa) {
   app.context.io = new SocketIO(app);
-  app.context.io.on('SubscribeMessage');
+  // app.context.io.on('SubscribeMessage', d => {
+  //   console.log(d);
+  // });
 }
