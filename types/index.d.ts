@@ -6,7 +6,7 @@ declare module 'Koa' {
   export interface BaseContext {
     request: Request;
     io: SocketIO;
-    // socketio: IO.Socket;
+    socketToken: string;
   }
   export interface Request extends Koa.BaseRequest {
     uid: string;

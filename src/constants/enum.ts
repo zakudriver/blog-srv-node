@@ -12,3 +12,9 @@ export enum Permission {
   admin = 1,
   guest = 2
 }
+
+export enum Event {
+  Auth = 'Auth',
+  Message = 'Message',
+  SubscribeMessage = 'SubscribeMessage'
+}

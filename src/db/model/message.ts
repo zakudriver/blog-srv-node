@@ -21,9 +21,13 @@ const messageSchema = new Mongoose.Schema(
       type: String,
       required: true
     },
-    article:{
+    article: {
       type: Mongoose.Schema.Types.ObjectId,
       ref: 'Article'
+    },
+    isRead: {
+      type: Boolean,
+      default: false
     }
   },
   {

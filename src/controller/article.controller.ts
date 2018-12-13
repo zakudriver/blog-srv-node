@@ -2,7 +2,7 @@ import * as Koa from 'koa';
 import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
 import { ArticleMod, MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
-import { Permission, Status } from '../constants/enum';
+import { Permission, Status, Event } from '../constants/enum';
 
 @prefix('/article')
 export default class ArticleController {
@@ -73,8 +73,7 @@ export default class ArticleController {
     limit = +limit;
     condition = +condition;
 
-    ctx.io.emit('Message', { test: 'test' });
-    // console.log(ctx.io)
+    ctx.io.emit(Event.Message, { test: 'test' });
 
     let find: { isFormal?: boolean; category?: string } = {};
     if (condition === 1) {
