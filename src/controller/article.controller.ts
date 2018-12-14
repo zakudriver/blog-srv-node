@@ -3,6 +3,7 @@ import { prefix, router, log, required, auth, permission } from '../middleware/r
 import { ArticleMod, MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
 import { Permission, Status, Event } from '../constants/enum';
+import { graphql, buildSchema } from 'graphql';
 
 @prefix('/article')
 export default class ArticleController {
@@ -291,5 +292,24 @@ export default class ArticleController {
       },
       'message send failed'
     );
+  }
+
+  @router({
+    path: '/test',
+    method: 'get'
+  })
+  @log
+  async GraphqlTest(ctx: Koa.Context) {
+    const result = await graphql(
+      buildSchema(`
+        type Query {
+          hello: String
+        }
+      `),
+      '{ hello }',
+      { hello: () => 'Hello world!' }
+    );
+
+    ctx.body = result;
   }
 }
