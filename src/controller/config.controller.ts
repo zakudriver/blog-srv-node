@@ -79,7 +79,7 @@ export default class ConfigController {
   @log
   async getFrontConfig(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
-      const results = await FrontConfigMod.findOne();
+      const results = await FrontConfigMod.findOne({}, { avatar: 1, name: 1, profile: 1, description: 1 });
       ctx.body = {
         code: Status.ok,
         data: results,
