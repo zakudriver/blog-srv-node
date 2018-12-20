@@ -6,6 +6,7 @@ import { verifyPermission } from '../permission';
 import { isToArray } from '../../libs';
 import { sucLog, keyword } from '../../libs/log';
 import { Status } from '../../constants/enum';
+import { onMessage } from '../socket/message.event';
 
 /**
  * 封装函数
@@ -125,4 +126,12 @@ export const auth = buildMethodDecorator(verifyToken);
  * 权限 装饰器
  */
 export const permission = (permissionType: number) => buildMethodDecorator(verifyPermission(permissionType));
+
+
+/**
+ * @onMessageSocket
+ * 接收meesage事件 装饰器
+ */
+// export const onMessageSocket = buildMethodDecorator(onMessage)
+
 

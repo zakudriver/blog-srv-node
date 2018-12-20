@@ -3,7 +3,7 @@ import * as Jwt from 'jsonwebtoken';
 import { Event, Status } from '../../constants/enum';
 
 export const token: Koa.Middleware = async (ctx, next) => {
-  checkSocketToken(ctx);
+  ctx.io.getHttpToken(ctx.request.headers.authorization);
   if (ctx.request.headers.authorization) {
     const clientTokenStr = ctx.request.headers.authorization.split(' ')[1] || '';
     const result = resolveToken(clientTokenStr);
@@ -30,8 +30,4 @@ export function resolveToken(tokenStr: string) {
   }
 
   return;
-}
-
-function checkSocketToken(ctx: Koa.Context) {
-  ctx.io.isToken = ctx.request.headers.authorization === ctx.socketToken;
 }

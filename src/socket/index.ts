@@ -4,10 +4,13 @@ import * as IO from 'socket.io';
 import config from '../config';
 import { terminalLog, errLog } from '../libs/log';
 import { Event, Status } from '../constants/enum';
+import { onMessage } from '../middleware/socket/message.event';
 
 export class SocketIO {
   koa: Koa;
-  isToken = true;
+  private _httpToken = '';
+  private _socketToken = '';
+
   private _tasks: { event: Event; cb: (params: any) => void }[] = [];
 
   private _io: IO.Server;
@@ -57,14 +60,6 @@ export class SocketIO {
     });
   }
 
-  emit(event: Event, data: any) {
-    if (this._socketid && this.isToken) {
-      this._io.to(this._socketid).emit(event, data);
-    } else {
-      this._handleErrEmit(event);
-    }
-  }
-
   /**
    * 接收到的数据 判断token
    *
@@ -76,8 +71,8 @@ export class SocketIO {
    */
   private _handleCB(event: Event, _cb: (p: any) => void) {
     return (params: any) => {
-      if (params.token && this.isToken) {
-        this.koa.context.socketToken = params.token;
+      if (params.token) {
+        this._socketToken = params.token;
         _cb(params);
       } else {
         this._handleErrEmit(event);
@@ -97,6 +92,25 @@ export class SocketIO {
       code: Status.overtime,
       msg: 'socket token failed'
     });
+  }
+
+  /**
+   * 获取http中的token
+   *
+   * @param {boolean} value
+   * @memberof SocketIO
+   */
+  getHttpToken(value: string) {
+    this._httpToken = value;
+  }
+
+  emit(event: Event, data: any) {
+    console.log(this._httpToken);
+    if (this._socketid && this._httpToken === this._socketToken) {
+      this._io.to(this._socketid).emit(event, data);
+    } else {
+      this._handleErrEmit(event);
+    }
   }
 
   on(event: Event, _cb: (params: any) => void) {
@@ -120,8 +134,7 @@ export class SocketIO {
 export function socketIO(app: Koa) {
   const socket = new SocketIO(app);
   app.context.io = socket;
-  app.context.io.on(Event.SubscribeMessage, d => {
-    console.log('SubscribeMessage');
-    console.log(d);
-  });
+
+  // 监听 message 事件
+  onMessage(socket);
 }

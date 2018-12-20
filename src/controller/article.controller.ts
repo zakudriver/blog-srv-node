@@ -74,8 +74,6 @@ export default class ArticleController {
     limit = +limit;
     condition = +condition;
 
-    ctx.io.emit(Event.Message, { test: 'test' });
-
     let find: { isFormal?: boolean; category?: string } = {};
     if (condition === 1) {
       find.isFormal = true;
@@ -267,7 +265,7 @@ export default class ArticleController {
     path: '/message',
     method: 'post'
   })
-  @required(['_id', 'name', 'email'])
+  @required(['article', 'name', 'email'])
   @log
   async sendMessage(ctx: Koa.Context) {
     const req = ctx.request.body;
