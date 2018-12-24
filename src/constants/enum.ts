@@ -14,7 +14,7 @@ export enum Permission {
 }
 
 export enum Event {
-  Auth = 'Auth',
   Message = 'Message',
-  SubscribeMessage = 'SubscribeMessage'
+  SubscribeMessage = 'SubscribeMessage',
+  AlreadyMessage = 'AlreadyMessage'
 }

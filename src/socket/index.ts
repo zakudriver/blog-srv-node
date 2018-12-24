@@ -7,7 +7,6 @@ import { Event, Status } from '../constants/enum';
 import { onMessage } from '../middleware/socket/message.event';
 
 export class SocketIO {
-  koa: Koa;
   private _httpToken = '';
   private _socketToken = '';
 
@@ -22,7 +21,6 @@ export class SocketIO {
     this._connection();
     this._disconnect();
     server.listen(config.get('wspost'));
-    this.koa = app;
   }
 
   private _runTasks(socket: IO.Socket) {
