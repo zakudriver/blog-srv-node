@@ -19,6 +19,7 @@ export function onMessage(io: SocketIO) {
       try {
         const updateArr: any = emitMessageId.map(i => MessageMod.findByIdAndUpdate(i, { $set: { isRead: true } }));
         await Promise.all(updateArr);
+        
         io.emit(Event.Message, {
           code: Status.ok,
           data: null,
@@ -36,19 +37,18 @@ export function onMessage(io: SocketIO) {
 }
 
 export async function emitMessage(io: SocketIO) {
-  const emitData = await MessageMod.find({ isRead: false }, { article: 1, name: 1, time: 1, text: 1, _id: 1 })
+  const emitData: IMessage[] = await MessageMod.find(
+    { isRead: false },
+    { article: 1, name: 1, time: 1, text: 1, _id: 1 }
+  )
     .populate('article', 'title')
     .lean();
 
-  const messageId: string[] = [];
-
-  emitData.forEach((i: IMessage) => {
+  emitMessageId = emitData.map(i => {
     i.time = moment(i.time).format('YYYY-MM-DD HH:mm:ss');
     i.text = i.text.substr(0, 10);
-    messageId.push(i._id);
+    return i._id;
   });
-
-  emitMessageId = messageId;
 
   io.emit(Event.Message, {
     code: Status.ok,
