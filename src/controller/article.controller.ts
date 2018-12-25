@@ -4,6 +4,7 @@ import { ArticleMod, MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
 import { Permission, Status, Event } from '../constants/enum';
 import { graphql, buildSchema } from 'graphql';
+import { emitMessage } from '../middleware/socket/message.event';
 
 @prefix('/article')
 export default class ArticleController {
@@ -281,6 +282,8 @@ export default class ArticleController {
             message: result._id
           }
         });
+
+        emitMessage(ctx.io);
 
         ctx.body = {
           code: 0,

@@ -3,8 +3,8 @@ import * as Jwt from 'jsonwebtoken';
 import { Event, Status } from '../../constants/enum';
 
 export const token: Koa.Middleware = async (ctx, next) => {
-  ctx.io.getHttpToken(ctx.request.headers.authorization);
   if (ctx.request.headers.authorization) {
+    ctx.io.getHttpToken(ctx.request.headers.authorization);
     const clientTokenStr = ctx.request.headers.authorization.split(' ')[1] || '';
     const result = resolveToken(clientTokenStr);
     if (result) {
