@@ -3,8 +3,7 @@ import * as Router from 'koa-router';
 import { Status, Permission } from '../../constants/enum';
 import { trycatch } from '../../libs/utils';
 import { UserMod } from '../../db/model';
-
-const USER_LIST: Koa.IUser[] = [];
+import { USER_LIST } from '../../global';
 
 // 验证用户
 export const verifyUser: Koa.Middleware = async (ctx, next) => {

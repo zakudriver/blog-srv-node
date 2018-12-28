@@ -2,8 +2,7 @@ import * as Koa from 'koa';
 import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
 import { ArticleMod, MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
-import { Permission, Status, Event } from '../constants/enum';
-import { graphql, buildSchema } from 'graphql';
+import { Permission, Status } from '../constants/enum';
 import { emitMessage } from '../middleware/socket/message.event';
 
 @prefix('/article')
@@ -282,7 +281,7 @@ export default class ArticleController {
             message: result._id
           }
         });
-
+        // 有留言推送客户端
         emitMessage(ctx.io);
 
         ctx.body = {
@@ -293,24 +292,5 @@ export default class ArticleController {
       },
       'message send failed'
     );
-  }
-
-  @router({
-    path: '/test',
-    method: 'get'
-  })
-  @log
-  async GraphqlTest(ctx: Koa.Context) {
-    const result = await graphql(
-      buildSchema(`
-        type Query {
-          hello: String
-        }
-      `),
-      '{ hello }',
-      { hello: () => 'Hello world!' }
-    );
-
-    ctx.body = result;
   }
 }

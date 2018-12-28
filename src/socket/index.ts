@@ -3,13 +3,12 @@ import * as Koa from 'koa';
 import * as IO from 'socket.io';
 import config from '../config';
 import { terminalLog, errLog } from '../libs/log';
-import { Event, Status } from '../constants/enum';
+import { Event, Status, Permission } from '../constants/enum';
 import { onMessage } from '../middleware/socket/message.event';
+import { USER_LIST } from '../global';
+import { resolveToken } from '../libs';
 
 export class SocketIO {
-  private _httpToken = '';
-  private _socketToken = '';
-
   private _tasks: { event: Event; cb: (params: any) => void }[] = [];
 
   private _io: IO.Server;
@@ -69,10 +68,10 @@ export class SocketIO {
    */
   private _handleCB(event: Event, _cb: (p: any) => void) {
     return (params: any) => {
-      if (params.token) {
-        this._socketToken = params.token;
+      if (this._authToken(params.token)) {
         _cb(params);
       } else {
+        console.log(false);
         this._handleErrEmit(event);
       }
     };
@@ -88,23 +87,30 @@ export class SocketIO {
   private _handleErrEmit(event: Event) {
     this._io.to(this._socketid).emit(event, {
       code: Status.overtime,
-      msg: 'socket token failed'
+      msg: 'socket token failed',
+      data: this._socketid
     });
   }
 
   /**
-   * 获取http中的token
+   * 验证socket token
    *
-   * @param {boolean} value
+   * @private
    * @memberof SocketIO
    */
-  getHttpToken(value: string) {
-    this._httpToken = value;
+  private _authToken(token: string): boolean {
+    const uid = resolveToken(token);
+    if (!uid) {
+      return false;
+    }
+
+    const result = USER_LIST.find(i => i._id.toString() === uid && i.permission === Permission.root);
+
+    return result ? true : false;
   }
 
   emit(event: Event, data: any) {
-    console.log(this._httpToken);
-    if (this._socketid && this._httpToken === this._socketToken) {
+    if (this._socketid) {
       this._io.to(this._socketid).emit(event, data);
     } else {
       this._handleErrEmit(event);
