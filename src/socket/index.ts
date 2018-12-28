@@ -93,7 +93,7 @@ export class SocketIO {
   }
 
   /**
-   * 验证socket token
+   * 验证socket token以及权限
    *
    * @private
    * @memberof SocketIO

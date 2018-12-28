@@ -6,12 +6,21 @@ import { SocketIO } from '../../socket';
 
 let emitMessageId: string[] = [];
 
+/**
+ * 监听 Message相关事件
+ *
+ * @export
+ * @param {SocketIO} io
+ */
 export function onMessage(io: SocketIO) {
   sucLog('onMessage');
+  
+  // 订阅Message
   io.on(Event.SubscribeMessage, params => {
     emitMessage(io);
   });
 
+  // 订阅Message已读
   io.on(Event.AlreadyMessage, async () => {
     console.log('AlreadyMessage');
 
@@ -36,6 +45,12 @@ export function onMessage(io: SocketIO) {
   });
 }
 
+/**
+ * 发送 Message事件数据
+ *
+ * @export
+ * @param {SocketIO} io
+ */
 export async function emitMessage(io: SocketIO) {
   const emitData: IMessage[] = await MessageMod.find({ isRead: false }, { article: 1, name: 1, time: 1, text: 1, _id: 1 })
     .populate('article', 'title')
