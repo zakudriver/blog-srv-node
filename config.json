@@ -6,13 +6,13 @@
     "log_path": "logs/"
   },
   "mongo": {
-    "development": "mongodb://zyhuatest:test@118.24.103.174:27017/webtest",
+    "development": "mongodb://webtest:zyhuatest@118.24.103.174:27000/webtest",
     "production": ""
   },
   "redis": {
     "development": {
       "host": "118.24.103.174",
-      "port": 6379,
+      "port": 6300,
       "pwd": "zyhua1122"
     },
     "production": {

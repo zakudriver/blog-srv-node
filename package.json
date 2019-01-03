@@ -9,7 +9,7 @@
     "dev": "nodemon",
     "build": "rm -rf ./dist && tsc --watch",
     "buildw": "rimraf ./dist && tsc --watch",
-    "start": "tsc && node dist/app.js",
+    "start": "env NODE_ENV=development node dist/app.js node dist/app.js",
     "watch": "webpack-watch-server --config ./build/webpack.config.js",
     "build:dev": "webpack --config ./build/webpack.config.js"
   },
