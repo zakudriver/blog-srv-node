@@ -7,40 +7,40 @@ import * as http from 'http';
 
 @prefix('/message')
 export default class MessageController {
-  @router({
-    path: '',
-    method: 'get'
-  })
-  @required(['index', 'limit'])
-  @auth
-  @log
-  async getMessage(ctx: Koa.Context) {
-    let { index, limit } = ctx.query;
-    index = +index;
-    limit = +limit;
+  // @router({
+  //   path: '',
+  //   method: 'get'
+  // })
+  // @required(['index', 'limit'])
+  // @auth
+  // @log
+  // async getMessage(ctx: Koa.Context) {
+  //   let { index, limit } = ctx.query;
+  //   index = +index;
+  //   limit = +limit;
 
-    await trycatch(
-      ctx,
-      async () => {
-        const count = await MessageMod.countDocuments();
-        const results = await MessageMod.find({ uid: ctx.request.uid })
-          .skip((index - 1) * limit)
-          .limit(limit)
-          .sort({ time: -1 })
-          .exec();
+  //   await trycatch(
+  //     ctx,
+  //     async () => {
+  //       const count = await MessageMod.countDocuments();
+  //       const results = await MessageMod.find({ uid: ctx.request.uid })
+  //         .skip((index - 1) * limit)
+  //         .limit(limit)
+  //         .sort({ time: -1 })
+  //         .exec();
 
-        ctx.body = {
-          code: Status.ok,
-          data: {
-            rows: results,
-            count
-          },
-          msg: 'message,hold well'
-        };
-      },
-      'message get failed'
-    );
-  }
+  //       ctx.body = {
+  //         code: Status.ok,
+  //         data: {
+  //           rows: results,
+  //           count
+  //         },
+  //         msg: 'message,hold well'
+  //       };
+  //     },
+  //     'message get failed'
+  //   );
+  // }
 
   @router({
     path: '/get',

@@ -88,32 +88,24 @@ export default class ConfigController {
     });
   }
 
-  @router({
-    path: '/addFrontTest',
-    method: 'get'
-  })
-  @log
-  async addFrontConfig(ctx: Koa.Context) {
-    // const newFrontConfig = new FrontConfigMod({
-    //   avatar: 'url',
-    //   name: 'Zyhua',
-    //   profile: 'Coder',
-    //   description: 'test'
-    // });
-    // await newFrontConfig.save();
+  // @router({
+  //   path: '/addFrontTest',
+  //   method: 'get'
+  // })
+  // @log
+  // async addFrontConfig(ctx: Koa.Context) {
+  //   const newFrontConfig = new FrontConfigMod({
+  //     avatar: 'url',
+  //     name: 'Zyhua',
+  //     profile: 'Coder',
+  //     description: 'test'
+  //   });
+  //   await newFrontConfig.save();
 
-    // ctx.body = {
-    //   code: Status.ok
-    // };
-    const results = await FrontConfigMod.updateOne({}, { name: 'Zyhua1' });
-    if (results) {
-      ctx.body = {
-        code: Status.ok,
-        data: results,
-        msg: `front's config updated successfully`
-      };
-    }
-  }
+  //   ctx.body = {
+  //     code: Status.ok
+  //   };
+  // }
 
   @router({
     path: '/front',

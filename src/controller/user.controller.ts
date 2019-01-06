@@ -150,14 +150,15 @@ export default class UserController {
           }
         }
 
-        const results = await UserMod.findByIdAndUpdate(uid, { $set: req });
-        if (results) {
-          ctx.body = {
-            code: Status.ok,
-            data: results,
-            msg: 'user modify successful'
-          };
-        }
+        await UserMod.findByIdAndUpdate(uid, { $set: req });
+
+        delete req.oldPassword;
+        delete req.newPassword;
+        ctx.body = {
+          code: Status.ok,
+          data: req,
+          msg: 'user modify successful'
+        };
       },
       'user modify failed'
     );

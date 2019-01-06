@@ -19,6 +19,9 @@ const categorySchema = new Mongoose.Schema(
       // unique: true
       default: 0
     },
+    uid: {
+      type: String
+    }
     // color: {
     //   type: String,
     //   required: true,
