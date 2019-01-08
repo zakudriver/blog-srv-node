@@ -23,7 +23,13 @@ const FrontConfigSchema = new Mongoose.Schema(
     description: {
       type: String,
       required: true
-    }
+    },
+    cover: [
+      {
+        type: String,
+        required: true
+      }
+    ]
   },
   {
     versionKey: false,

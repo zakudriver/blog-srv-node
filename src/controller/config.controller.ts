@@ -132,4 +132,5 @@ export default class ConfigController {
       `front's config updated failed`
     );
   }
+  
 }
