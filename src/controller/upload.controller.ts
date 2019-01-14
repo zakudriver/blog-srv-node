@@ -19,18 +19,18 @@ const uploadHost = config.get('upload').host[config.get('env')];
 @prefix('/upload')
 export default class UploadController {
   @router({
-    path: '',
+    path: '/article',
     method: 'post'
   })
   @auth
   @permission(Permission.root)
   @log
-  async uploadFile(ctx: Koa.Context) {
+  async uploadArticleFile(ctx: Koa.Context) {
     if (!ctx.request.files) {
       return (ctx.body = {
         code: Status.error,
         data: null,
-        msg: 'upload failed'
+        msg: 'article file upload failed'
       });
     }
 
@@ -55,7 +55,7 @@ export default class UploadController {
           ctx.body = {
             code: Status.ok,
             data: results,
-            msg: 'upload successful'
+            msg: 'article file upload successful'
           };
         }
       },
@@ -64,18 +64,18 @@ export default class UploadController {
   }
 
   @router({
-    path: '/avatar',
+    path: '',
     method: 'post'
   })
   @auth
   @permission(Permission.root)
   @log
-  async uploadAvatar(ctx: Koa.Context) {
+  async upload(ctx: Koa.Context) {
     if (!ctx.request.files) {
       return (ctx.body = {
         code: Status.error,
         data: null,
-        msg: 'avatar upload failed'
+        msg: 'upload failed'
       });
     }
 
@@ -85,10 +85,10 @@ export default class UploadController {
         const statResult = await fs_stat(userUploadDir);
 
         if (statResult.isDirectory()) {
-          const file = ctx.request.files!.avatar;
+          const file = ctx.request.files!.uploadFile;
           const reader = fs.createReadStream(file.path);
           const ext = file.name.split('.').pop();
-          const uploadName = `avatar_${new Date().getTime()}.${ext}`;
+          const uploadName = `image_${new Date().getTime()}.${ext}`;
           const writer = fs.createWriteStream(`${userUploadDir}/${uploadName}`);
 
           reader.pipe(writer);
@@ -98,23 +98,23 @@ export default class UploadController {
           ctx.body = {
             code: Status.ok,
             data: uploadUrl,
-            msg: 'avatar upload successful'
+            msg: 'upload successful'
           };
         }
       },
-      'avatar upload failed'
+      'upload failed'
     );
   }
 
   @router({
-    path: '',
+    path: '/article',
     method: 'delete'
   })
   @auth
   @required(['_id'])
   @permission(Permission.root)
   @log
-  async removeUpload(ctx: Koa.Context) {
+  async removeArticleUpload(ctx: Koa.Context) {
     const req = ctx.request.body as { _id: string };
 
     await trycatch(

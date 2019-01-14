@@ -79,7 +79,10 @@ export default class ConfigController {
   @log
   async getFrontConfig(ctx: Koa.Context) {
     await trycatch(ctx, async () => {
-      const results = await FrontConfigMod.findOne({}, { avatar: 1, name: 1, profile: 1, description: 1 });
+      const results = await FrontConfigMod.findOne(
+        {},
+        { avatar: 1, name: 1, profile: 1, description: 1, cover: 1, defaultThumb: 1 }
+      );
       ctx.body = {
         code: Status.ok,
         data: results,
@@ -98,7 +101,12 @@ export default class ConfigController {
   //     avatar: 'url',
   //     name: 'Zyhua',
   //     profile: 'Coder',
-  //     description: 'test'
+  //     description: 'test',
+  //     cover: {
+  //       home: '1',
+  //       blog: '2'
+  //     },
+  //     defaultThumb: ['1', '2']
   //   });
   //   await newFrontConfig.save();
 
@@ -132,5 +140,4 @@ export default class ConfigController {
       `front's config updated failed`
     );
   }
-  
 }

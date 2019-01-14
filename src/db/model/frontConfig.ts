@@ -5,6 +5,11 @@ export interface IFrontConfig extends Mongoose.Document {
   name: string;
   profile: string;
   description: string;
+  cover: {
+    home: string;
+    blog: string;
+    article: string[];
+  };
 }
 
 const FrontConfigSchema = new Mongoose.Schema(
@@ -24,7 +29,17 @@ const FrontConfigSchema = new Mongoose.Schema(
       type: String,
       required: true
     },
-    cover: [
+    cover: {
+      home: {
+        type: String,
+        required: true
+      },
+      blog: {
+        type: String,
+        required: true
+      }
+    },
+    defaultThumb: [
       {
         type: String,
         required: true
