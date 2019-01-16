@@ -10,7 +10,8 @@ const redisConfig = config.get('redis')[config.get('env')];
 const client = Redis.createClient({
   host: redisConfig.host,
   port: redisConfig.port,
-  no_ready_check: true
+  no_ready_check: true,
+  connect_timeout: 60000 * 60
 });
 
 client.auth(redisConfig.pwd, err => {
@@ -34,7 +35,7 @@ interface IRedisPro extends Redis.RedisClient {
   getAsync: (key: string) => Promise<string>;
   pexpireAsync: (key: string, milliseconds: number) => Promise<number>;
   ttlAsync: (key: string) => Promise<number>;
-  setAsync: (key: string, value: string) => Promise<number>;
+  setAsync: (key: string, value: string) => Promise<{}>;
 }
 
 export default clientPro;
