@@ -7,7 +7,7 @@
   },
   "mongo": {
     "development": "mongodb://webtest:zyhuatest@118.24.103.174:27000/webtest",
-    "production": ""
+    "production": "mongodb://webtest:zyhuatest@0.0.0.0:27000/webtest"
   },
   "redis": {
     "development": {
@@ -16,8 +16,9 @@
       "pwd": "zyhua1122"
     },
     "production": {
-      "url": "",
-      "host": 1
+      "host": "0.0.0.0",
+      "port": 6300,
+      "pwd": "zyhua1122"
     }
   },
   "session": {
