@@ -1,8 +1,13 @@
 FROM node
-RUN mkdir -p /home/koa
-WORKDIR /home/koa
-COPY package.json /home/koa
-COPY config.json /home/koa
-RUN npm install
-COPY dist /home/koa
-EXPOSE 8999 9999
+MAINTAINER zyhua
+
+ADD . /home/app
+WORKDIR /home/app
+RUN npm install yarn -g
+RUN yarn
+EXPOSE 8999
+EXPOSE 9999
+EXPOSE 27000
+EXPOSE 6300
+#程序启动脚本
+CMD ["npm", "start"]

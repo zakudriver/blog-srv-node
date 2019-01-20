@@ -7,14 +7,15 @@ import { fs_stat, fs_unlink } from '../libs/promisify';
 import { UploadMod } from '../db/model';
 import { Permission, Status } from '../constants/enum';
 
+const env = config.get('env');
 // 文章（文件）上传文件路径
 const articleDir = config.get('upload').uploadDir.article;
 const articleUploadDir = cwdResolve(articleDir);
 // 用户（头像）上传路径
-const userDir = config.get('upload').uploadDir.user;
-const userUploadDir = cwdResolve(userDir);
+const profileDir = config.get('upload').uploadDir[env].profile;
+const profileUploadDir = cwdResolve(profileDir);
 // 上传后返回所在域名
-const uploadHost = config.get('upload').host[config.get('env')];
+const uploadHost = config.get('upload').host[env];
 
 @prefix('/upload')
 export default class UploadController {
@@ -82,18 +83,18 @@ export default class UploadController {
     await trycatch(
       ctx,
       async () => {
-        const statResult = await fs_stat(userUploadDir);
+        const statResult = await fs_stat(profileUploadDir);
 
         if (statResult.isDirectory()) {
           const file = ctx.request.files!.uploadFile;
           const reader = fs.createReadStream(file.path);
           const ext = file.name.split('.').pop();
           const uploadName = `image_${new Date().getTime()}.${ext}`;
-          const writer = fs.createWriteStream(`${userUploadDir}/${uploadName}`);
+          const writer = fs.createWriteStream(`${profileUploadDir}/${uploadName}`);
 
           reader.pipe(writer);
 
-          const uploadUrl = `${uploadHost + userDir}/${uploadName}`;
+          const uploadUrl = `${uploadHost + profileDir}/${uploadName}`;
 
           ctx.body = {
             code: Status.ok,

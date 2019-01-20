@@ -36,8 +36,14 @@
   "upload": {
     "maxUploadSize": 10,
     "uploadDir": {
-      "article": "/upload/article",
-      "user": "/upload/user"
+      "development": {
+        "article": "/upload/article",
+        "profile": "/upload/profile"
+      },
+      "production": {
+        "article": "/home/root/nginx/upload/article",
+        "profile": "/home/root/nginx/upload/profile"
+      }
     },
     "host": {
       "development": "http://127.0.0.1:8999",

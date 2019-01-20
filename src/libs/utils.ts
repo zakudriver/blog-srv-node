@@ -38,5 +38,8 @@ export async function trycatch(ctx: Koa.Context, func: () => void, errMsg?: stri
 }
 
 export function cwdResolve(dir: string) {
+  if (config.get('env') === 'production') {
+    return dir;
+  }
   return path.resolve(process.cwd() + dir);
 }
