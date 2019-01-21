@@ -1,13 +1,13 @@
 {
   "port": "8999",
-  "wspost": "9999",
+  "wspost": "7999",
   "log": {
     "log_name": "log",
     "log_path": "logs/"
   },
   "mongo": {
     "development": "mongodb://webtest:zyhuatest@118.24.103.174:27000/webtest",
-    "production": "mongodb://webtest:zyhuatest@0.0.0.0:27000/webtest"
+    "production": "mongodb://webtest:zyhuatest@blog_mongo:27017/webtest"
   },
   "redis": {
     "development": {
@@ -16,7 +16,7 @@
       "pwd": "zyhua1122"
     },
     "production": {
-      "host": "0.0.0.0",
+      "host": "blog_redis",
       "port": 6300,
       "pwd": "zyhua1122"
     }
@@ -41,7 +41,7 @@
     },
     "host": {
       "development": "http://127.0.0.1:8999",
-      "production": ""
+      "production": "http://static.zyhua.cn"
     }
   }
 }

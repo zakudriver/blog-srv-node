@@ -26,7 +26,7 @@ export default class UploadController {
   @auth
   @permission(Permission.root)
   @log
-  async uploadArticleFile(ctx: Koa.Context) {
+  async articleFileUpload(ctx: Koa.Context) {
     if (!ctx.request.files) {
       return (ctx.body = {
         code: Status.error,
@@ -51,7 +51,7 @@ export default class UploadController {
 
         reader.pipe(writer);
 
-        const uploadUrl = `${uploadHost + articleDir}/${uploadName}`;
+        const uploadUrl = `${uploadHost}/article/${uploadName}`;
         const newUpload = new UploadMod({ name: uploadName, url: uploadUrl });
         const results = await newUpload.save();
 
@@ -72,12 +72,12 @@ export default class UploadController {
   @auth
   @permission(Permission.root)
   @log
-  async upload(ctx: Koa.Context) {
+  async profileUpload(ctx: Koa.Context) {
     if (!ctx.request.files) {
       return (ctx.body = {
         code: Status.error,
         data: null,
-        msg: 'upload failed'
+        msg: 'profile file upload failed'
       });
     }
 
@@ -97,15 +97,15 @@ export default class UploadController {
 
         reader.pipe(writer);
 
-        const uploadUrl = `${uploadHost + profileDir}/${uploadName}`;
+        const uploadUrl = `${uploadHost}/profile/${uploadName}`;
 
         ctx.body = {
           code: Status.ok,
           data: uploadUrl,
-          msg: 'upload successful'
+          msg: 'profile file upload successful'
         };
       },
-      'upload failed'
+      'profile file upload failed'
     );
   }
 
