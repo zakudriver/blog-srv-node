@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as Koa from 'koa';
 import { prefix, router, log, required, auth, permission } from '../middleware/router/decorators';
-import { cwdResolve, trycatch } from '../libs/utils';
+import { cwdResolve, trycatch, mkdirsSync } from '../libs/utils';
 import config from '../config';
 import { fs_stat, fs_unlink } from '../libs/promisify';
 import { UploadMod } from '../db/model';
@@ -12,7 +12,7 @@ const env = config.get('env');
 const articleDir = config.get('upload').uploadDir.article;
 const articleUploadDir = cwdResolve(articleDir);
 // 用户（头像）上传路径
-const profileDir = config.get('upload').uploadDir[env].profile;
+const profileDir = config.get('upload').uploadDir.profile;
 const profileUploadDir = cwdResolve(profileDir);
 // 上传后返回所在域名
 const uploadHost = config.get('upload').host[env];
@@ -38,27 +38,28 @@ export default class UploadController {
     await trycatch(
       ctx,
       async () => {
-        const statResult = await fs_stat(articleUploadDir);
-
-        if (statResult.isDirectory()) {
-          const file = ctx.request.files!.uploadFile;
-          const reader = fs.createReadStream(file.path);
-          const ext = file.name.split('.').pop();
-          const uploadName = `article_${new Date().getTime()}.${ext}`;
-          const writer = fs.createWriteStream(`${articleUploadDir}/${uploadName}`);
-
-          reader.pipe(writer);
-
-          const uploadUrl = `${uploadHost + articleDir}/${uploadName}`;
-          const newUpload = new UploadMod({ name: uploadName, url: uploadUrl });
-          const results = await newUpload.save();
-
-          ctx.body = {
-            code: Status.ok,
-            data: results,
-            msg: 'article file upload successful'
-          };
+        const stat = await fs_stat(articleUploadDir);
+        if (!stat.isDirectory()) {
+          mkdirsSync(articleUploadDir);
         }
+
+        const file = ctx.request.files!.uploadFile;
+        const reader = fs.createReadStream(file.path);
+        const ext = file.name.split('.').pop();
+        const uploadName = `article_${new Date().getTime()}.${ext}`;
+        const writer = fs.createWriteStream(`${articleUploadDir}/${uploadName}`);
+
+        reader.pipe(writer);
+
+        const uploadUrl = `${uploadHost + articleDir}/${uploadName}`;
+        const newUpload = new UploadMod({ name: uploadName, url: uploadUrl });
+        const results = await newUpload.save();
+
+        ctx.body = {
+          code: Status.ok,
+          data: results,
+          msg: 'article file upload successful'
+        };
       },
       'upload failed'
     );
@@ -83,25 +84,26 @@ export default class UploadController {
     await trycatch(
       ctx,
       async () => {
-        const statResult = await fs_stat(profileUploadDir);
-
-        if (statResult.isDirectory()) {
-          const file = ctx.request.files!.uploadFile;
-          const reader = fs.createReadStream(file.path);
-          const ext = file.name.split('.').pop();
-          const uploadName = `image_${new Date().getTime()}.${ext}`;
-          const writer = fs.createWriteStream(`${profileUploadDir}/${uploadName}`);
-
-          reader.pipe(writer);
-
-          const uploadUrl = `${uploadHost + profileDir}/${uploadName}`;
-
-          ctx.body = {
-            code: Status.ok,
-            data: uploadUrl,
-            msg: 'upload successful'
-          };
+        const stat = await fs_stat(profileUploadDir);
+        if (!stat.isDirectory()) {
+          mkdirsSync(articleUploadDir);
         }
+
+        const file = ctx.request.files!.uploadFile;
+        const reader = fs.createReadStream(file.path);
+        const ext = file.name.split('.').pop();
+        const uploadName = `image_${new Date().getTime()}.${ext}`;
+        const writer = fs.createWriteStream(`${profileUploadDir}/${uploadName}`);
+
+        reader.pipe(writer);
+
+        const uploadUrl = `${uploadHost + profileDir}/${uploadName}`;
+
+        ctx.body = {
+          code: Status.ok,
+          data: uploadUrl,
+          msg: 'upload successful'
+        };
       },
       'upload failed'
     );

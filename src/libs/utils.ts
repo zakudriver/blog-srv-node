@@ -1,6 +1,7 @@
 import * as Koa from 'koa';
 import * as Crypto from 'crypto';
 import * as path from 'path';
+import * as fs from 'fs';
 import config from '../config';
 import { errLog } from '../libs/log';
 import { Status } from '../constants/enum';
@@ -37,9 +38,34 @@ export async function trycatch(ctx: Koa.Context, func: () => void, errMsg?: stri
   }
 }
 
+/**
+ * 路径处理
+ *
+ * @export
+ * @param {string} dir
+ * @returns
+ */
 export function cwdResolve(dir: string) {
-  if (config.get('env') === 'production') {
-    return dir;
-  }
+  // if (config.get('env') === 'production') {
+  //   return dir;
+  // }
   return path.resolve(process.cwd() + dir);
+}
+
+/**
+ * 递归创建路径 (同步)
+ *
+ * @export
+ * @param {string} dir
+ * @returns
+ */
+export function mkdirsSync(dir: string) {
+  if (fs.existsSync(dir)) {
+    return true;
+  } else {
+    if (mkdirsSync(path.dirname(dir))) {
+      fs.mkdirSync(dir);
+      return true;
+    }
+  }
 }
