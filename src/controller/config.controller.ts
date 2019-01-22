@@ -81,7 +81,7 @@ export default class ConfigController {
     await trycatch(ctx, async () => {
       const results = await FrontConfigMod.findOne(
         {},
-        { avatar: 1, name: 1, profile: 1, description: 1, cover: 1, defaultThumb: 1 }
+        { avatar: 1, name: 1, profile: 1, description: 1, cover: 1, articleCover: 1 }
       );
       ctx.body = {
         code: Status.ok,
@@ -106,7 +106,7 @@ export default class ConfigController {
   //       home: '1',
   //       blog: '2'
   //     },
-  //     defaultThumb: ['1', '2']
+  //     articleCover: ['1', '2']
   //   });
   //   await newFrontConfig.save();
 

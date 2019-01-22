@@ -10,5 +10,4 @@ RUN yarn
 EXPOSE 8999
 EXPOSE 7999
 
-#程序启动脚本
 CMD ["npm", "start"]

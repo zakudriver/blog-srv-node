@@ -8,8 +8,8 @@ export interface IFrontConfig extends Mongoose.Document {
   cover: {
     home: string;
     blog: string;
-    article: string[];
   };
+  articleCover: string[];
 }
 
 const FrontConfigSchema = new Mongoose.Schema(
@@ -39,7 +39,7 @@ const FrontConfigSchema = new Mongoose.Schema(
         required: true
       }
     },
-    defaultThumb: [
+    articleCover: [
       {
         type: String,
         required: true

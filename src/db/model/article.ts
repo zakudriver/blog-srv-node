@@ -8,7 +8,7 @@ export interface IArticle extends Mongoose.Document {
   content: string;
   createTime: string;
   updateTime: string;
-  cover?: string;
+  cover: string;
   uploads?: IUpload[];
   isFormal: boolean;
   message?: IMessage[];
