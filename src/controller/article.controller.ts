@@ -162,28 +162,33 @@ export default class ArticleController {
   async searchArticle(ctx: Koa.Context) {
     const { category, title, start, end } = ctx.query;
     const titleSearch = !category && !start && !end && title;
-    console.log(titleSearch);
 
-    await trycatch(ctx, async () => {
-      const results = await ArticleMod.find(
-        {
-          $and: [
-            { title: { $regex: new RegExp(title), $options: '$i' } },
-            category ? { category } : {},
-            start ? { updateTime: { $gte: new Date(start) } } : {},
-            end ? { updateTime: { $lte: new Date(end) } } : {}
-          ]
-        },
-        titleSearch ? { title: 1 } : { message: 0, uploads: 0, isFormal: 0 }
-      )
-        .populate('category', 'name')
-        .exec();
+    await trycatch(
+      ctx,
+      async () => {
+        const results = await ArticleMod.find(
+          {
+            $and: [
+              { isFormal: true },
+              { title: { $regex: new RegExp(title), $options: '$i' } },
+              category ? { category } : {},
+              start ? { updateTime: { $gte: new Date(start) } } : {},
+              end ? { updateTime: { $lte: new Date(end) } } : {}
+            ]
+          },
+          titleSearch ? { title: 1 } : { message: 0, uploads: 0, isFormal: 0 }
+        )
+          .populate('category', 'name')
+          .exec();
 
-      ctx.body = {
-        code: Status.ok,
-        data: results
-      };
-    });
+        ctx.body = {
+          code: Status.ok,
+          data: results,
+          mgs: 'search successfully'
+        };
+      },
+      'search failed'
+    );
   }
 
   @router({
