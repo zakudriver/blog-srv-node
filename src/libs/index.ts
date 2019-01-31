@@ -1,4 +1,7 @@
 import * as Jwt from 'jsonwebtoken';
+import * as fs from 'fs';
+import { cwdResolve } from './utils';
+import config from '../config';
 
 /**
  *
@@ -26,4 +29,13 @@ export function resolveToken(authorization: string): string {
   }
 
   return '';
+}
+
+export function sslReader() {
+  const key = cwdResolve(config.get('ssl')['key']);
+  const cert = cwdResolve(config.get('ssl')['crt']);
+  return {
+    key: fs.readFileSync(key).toString(),
+    cert: fs.readFileSync(cert).toString()
+  };
 }

@@ -2,6 +2,7 @@ import * as Koa from 'koa';
 import * as cors from '@koa/cors';
 import * as KoaStatic from 'koa-static';
 import * as KoaBody from 'koa-body';
+import * as https from 'https';
 import Router from './middleware/router';
 import DbConnection from './db';
 import config from './config';
@@ -9,6 +10,7 @@ import { terminalLog } from './libs/log';
 import { token } from './middleware/token';
 import { verifyUser } from './middleware/permission';
 import { socketIO } from './socket';
+import { sslReader } from './libs';
 
 export const app = new Koa();
 const router = new Router(app);
@@ -49,6 +51,7 @@ app.use(verifyUser);
 // 注册路由
 router.register(`${__dirname}/controller`);
 
-app.listen(config.get('port'));
+// app.listen(config.get('port'));
+https.createServer(sslReader(), app.callback()).listen(config.get('port'));
 
 terminalLog(`Server running on port ${config.get('port')}`);

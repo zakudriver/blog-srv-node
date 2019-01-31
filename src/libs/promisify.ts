@@ -9,3 +9,5 @@ export const fs_readdir = util.promisify(fs.readdir);
 export const fs_unlink = util.promisify(fs.unlink);
 
 export const http_request = util.promisify(http.request);
+
+export const fs_readFile = util.promisify(fs.readFile);

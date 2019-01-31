@@ -43,5 +43,9 @@
       "development": "http://127.0.0.1:8999",
       "production": "http://static.zyhua.cn"
     }
+  },
+  "ssl": {
+    "key": "/ssl/2_zyhua.cn.key",
+    "crt": "/ssl/1_zyhua.cn_bundle.crt"
   }
 }
