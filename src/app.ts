@@ -51,7 +51,7 @@ app.use(verifyUser);
 // 注册路由
 router.register(`${__dirname}/controller`);
 
-// app.listen(config.get('port'));
-https.createServer(sslReader(), app.callback()).listen(config.get('port'));
+app.listen(config.get('port'));
+// https.createServer(sslReader(), app.callback()).listen(config.get('port'));
 
 terminalLog(`Server running on port ${config.get('port')}`);

@@ -45,7 +45,7 @@
     }
   },
   "ssl": {
-    "key": "/ssl/2_zyhua.cn.key",
-    "crt": "/ssl/1_zyhua.cn_bundle.crt"
+    "key": "/ssl/2_api.zyhua.cn.key",
+    "crt": "/ssl/1_api.zyhua.cn_bundle.crt"
   }
 }
