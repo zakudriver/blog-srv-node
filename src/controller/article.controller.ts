@@ -18,7 +18,7 @@ export default class ArticleController {
     await trycatch(
       ctx,
       async () => {
-        await ArticleMod.findByIdAndUpdate(req._id, { $inc: { read: 1 } });
+        // await ArticleMod.findByIdAndUpdate(req._id, { $inc: { read: 1 } });
         const results = await ArticleMod.findById(req._id)
           .populate('uploads', ['url', 'name'])
           .populate('category', 'name');

@@ -1,32 +1,32 @@
 import * as Mongoose from 'mongoose';
 
 export interface IMessage extends Mongoose.Document {
-  uid: string;
+  uid  : string;
   email: string;
-  text: string;
-  time: string;
+  text : string;
+  time : string;
 }
 
 const messageSchema = new Mongoose.Schema(
   {
     name: {
-      type: String,
+      type    : String,
       required: true
     },
     email: {
-      type: String,
+      type    : String,
       required: true
     },
     text: {
-      type: String,
+      type    : String,
       required: true
     },
     article: {
       type: Mongoose.Schema.Types.ObjectId,
-      ref: 'Article'
+      ref : 'Article'
     },
     isRead: {
-      type: Boolean,
+      type   : Boolean,
       default: false
     }
   },

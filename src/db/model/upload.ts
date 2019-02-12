@@ -2,17 +2,17 @@ import * as Mongoose from 'mongoose';
 
 export interface IUpload extends Mongoose.Document {
   name: string;
-  url: string;
+  url : string;
 }
 
 const uploadSchema = new Mongoose.Schema(
   {
     name: {
-      type: String,
+      type    : String,
       required: true
     },
     url: {
-      type: String,
+      type    : String,
       required: true
     }
   },

@@ -8,9 +8,9 @@ const { promisify } = Util;
 const redisConfig = config.get('redis')[config.get('env')];
 
 const client = Redis.createClient({
-  host: redisConfig.host,
-  port: redisConfig.port,
-  no_ready_check: true,
+  host           : redisConfig.host,
+  port           : redisConfig.port,
+  no_ready_check : true,
   connect_timeout: 60000 * 60
 });
 
@@ -24,18 +24,18 @@ client.on('error', err => {
   errLog(err);
 });
 
-const getAsync = promisify(client.get).bind(client);
+const getAsync     = promisify(client.get).bind(client);
 const pexpireAsync = promisify(client.pexpire).bind(client);
-const ttlAsync = promisify(client.ttl).bind(client);
-const setAsync = promisify(client.set).bind(client);
+const ttlAsync     = promisify(client.ttl).bind(client);
+const setAsync     = promisify(client.set).bind(client);
 
 const clientPro: IRedisPro = Object.assign(client, { getAsync, pexpireAsync, ttlAsync, setAsync });
 
 interface IRedisPro extends Redis.RedisClient {
-  getAsync: (key: string) => Promise<string>;
+  getAsync    : (key: string) => Promise<string>;
   pexpireAsync: (key: string, milliseconds: number) => Promise<number>;
-  ttlAsync: (key: string) => Promise<number>;
-  setAsync: (key: string, value: string) => Promise<{}>;
+  ttlAsync    : (key: string) => Promise<number>;
+  setAsync    : (key: string, value: string) => Promise<{}>;
 }
 
 export default clientPro;

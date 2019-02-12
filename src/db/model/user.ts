@@ -1,30 +1,30 @@
 import * as Mongoose from 'mongoose';
 
 export interface IUser extends Mongoose.Document {
-  username: string;
-  password: string;
-  avatar: string;
+  username  : string;
+  password  : string;
+  avatar    : string;
   permission: number;
 }
 
 const UserSchema = new Mongoose.Schema(
   {
     username: {
-      type: String,
-      unique: true,
+      type    : String,
+      unique  : true,
       required: true
     },
     password: {
-      type: String,
+      type    : String,
       required: true
     },
     avatar: {
       type: String
     },
     permission: {
-      type: Number,
+      type    : Number,
       required: true,
-      default: 2
+      default : 2
     }
     // createTime: {
     //   type: Date,

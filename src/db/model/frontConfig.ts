@@ -1,11 +1,11 @@
 import * as Mongoose from 'mongoose';
 
 export interface IFrontConfig extends Mongoose.Document {
-  avatar: string;
-  name: string;
-  profile: string;
+  avatar     : string;
+  name       : string;
+  profile    : string;
   description: string;
-  cover: {
+  cover      : {
     home: string;
     blog: string;
   };
@@ -15,33 +15,33 @@ export interface IFrontConfig extends Mongoose.Document {
 const FrontConfigSchema = new Mongoose.Schema(
   {
     avatar: {
-      type: String,
+      type    : String,
       required: true
     },
     name: {
-      type: String,
+      type    : String,
       required: true
     },
     profile: {
       type: String
     },
     description: {
-      type: String,
+      type    : String,
       required: true
     },
     cover: {
       home: {
-        type: String,
+        type    : String,
         required: true
       },
       blog: {
-        type: String,
+        type    : String,
         required: true
       }
     },
     articleCover: [
       {
-        type: String,
+        type    : String,
         required: true
       }
     ]

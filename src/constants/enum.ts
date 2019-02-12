@@ -1,20 +1,20 @@
 export enum Status {
-  ok = 0,
-  error = 1,
-  BDerror = 2,
+  ok         = 0,
+  error      = 1,
+  BDerror    = 2,
   permission = 3,
-  overtime = 110,
-  bug = 10086
+  overtime   = 110,
+  bug        = 10086
 }
 
 export enum Permission {
-  root = 0,
+  root  = 0,
   admin = 1,
   guest = 2
 }
 
 export enum Event {
-  Message = 'Message',
+  Message          = 'Message',
   SubscribeMessage = 'SubscribeMessage',
-  AlreadyMessage = 'AlreadyMessage'
+  AlreadyMessage   = 'AlreadyMessage'
 }

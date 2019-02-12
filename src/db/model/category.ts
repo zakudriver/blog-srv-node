@@ -1,8 +1,8 @@
 import * as Mongoose from 'mongoose';
 
 export interface ICategory extends Mongoose.Document {
-  name: string;
-  order: number;
+  name      : string;
+  order     : number;
   createTime: string;
   updateTime: string;
 }
@@ -10,8 +10,8 @@ export interface ICategory extends Mongoose.Document {
 const categorySchema = new Mongoose.Schema(
   {
     name: {
-      type: String,
-      unique: true,
+      type    : String,
+      unique  : true,
       required: true
     },
     order: {

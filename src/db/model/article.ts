@@ -3,27 +3,27 @@ import { IUpload } from './upload';
 import { IMessage } from './message';
 
 export interface IArticle extends Mongoose.Document {
-  title: string;
-  category: string;
-  content: string;
+  title     : string;
+  category  : string;
+  content   : string;
   createTime: string;
   updateTime: string;
-  cover: string;
-  uploads?: IUpload[];
-  isFormal: boolean;
-  message?: IMessage[];
+  cover     : string;
+  uploads?  : IUpload[];
+  isFormal  : boolean;
+  message?  : IMessage[];
 }
 
 const articleSchema = new Mongoose.Schema(
   {
     title: {
-      type: String,
+      type    : String,
       required: true
     },
     category: {
-      type: Mongoose.Schema.Types.ObjectId,
+      type    : Mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'Category'
+      ref     : 'Category'
     },
     content: {
       type: String
@@ -34,22 +34,22 @@ const articleSchema = new Mongoose.Schema(
     uploads: [
       {
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Upload'
+        ref : 'Upload'
       }
     ],
     read: {
-      type: Number,
-      default: 0,
+      type    : Number,
+      default : 0,
       required: true
     },
     isFormal: {
-      type: Boolean,
+      type    : Boolean,
       required: true
     },
     message: [
       {
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Message'
+        ref : 'Message'
       }
     ]
   },

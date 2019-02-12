@@ -1,17 +1,17 @@
 import * as Mongoose from 'mongoose';
 
 export interface IAdminConfig extends Mongoose.Document {
-  logo: string;
-  title: string;
+  logo        : string;
+  title       : string;
   primaryColor: string;
-  drawerColor: string;
-  drawerWidth: number;
+  drawerColor : string;
+  drawerWidth : number;
 }
 
 const AdminConfigSchema = new Mongoose.Schema(
   {
     logo: {
-      type: String,
+      type   : String,
       default: ''
     },
     primaryColor: {
