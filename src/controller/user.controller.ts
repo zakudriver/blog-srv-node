@@ -72,30 +72,30 @@ export default class UserController {
     );
   }
 
-  @router({
-    path: '/register',
-    method: 'get'
-  })
-  @log
-  async signIn(ctx: Koa.Context) {
-    const newUser = new UserMod({
-      username: 'guest',
-      password: cryptPwd('guest')
-    });
+  // @router({
+  //   path: '/register',
+  //   method: 'get'
+  // })
+  // @log
+  // async signIn(ctx: Koa.Context) {
+  //   const newUser = new UserMod({
+  //     username: 'guest',
+  //     password: cryptPwd('guest')
+  //   });
 
-    await trycatch(
-      ctx,
-      async () => {
-        const results = await newUser.save();
-        ctx.body = {
-          code: Status.ok,
-          data: results,
-          msg: 'register successful'
-        };
-      },
-      'register failed'
-    );
-  }
+  //   await trycatch(
+  //     ctx,
+  //     async () => {
+  //       const results = await newUser.save();
+  //       ctx.body = {
+  //         code: Status.ok,
+  //         data: results,
+  //         msg: 'register successful'
+  //       };
+  //     },
+  //     'register failed'
+  //   );
+  // }
 
   @router({
     path: '/',
