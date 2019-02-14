@@ -4,6 +4,7 @@ import { ArticleMod, MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
 import { Permission, Status } from '../constants/enum';
 import { emitMessage } from '../middleware/socket/message.event';
+import { replaceMDImg } from '../libs';
 
 @prefix('/article')
 export default class ArticleController {
@@ -141,7 +142,7 @@ export default class ArticleController {
           .exec();
 
         results.forEach(i => {
-          i.content = i.content.substr(0, 300);
+          i.content = replaceMDImg(i.content.substr(0, 300));
         });
 
         ctx.body = {

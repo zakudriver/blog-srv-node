@@ -31,6 +31,12 @@ export function resolveToken(authorization: string): string {
   return '';
 }
 
+/**
+ * 读取ssl文件
+ *
+ * @export
+ * @returns
+ */
 export function sslReader() {
   const key = cwdResolve(config.get('ssl')['key']);
   const cert = cwdResolve(config.get('ssl')['crt']);
@@ -38,4 +44,15 @@ export function sslReader() {
     key: fs.readFileSync(key).toString(),
     cert: fs.readFileSync(cert).toString()
   };
+}
+
+/**
+ * 替换markdown中的图片语法
+ *
+ * @export
+ * @param {string} s
+ * @returns
+ */
+export function replaceMDImg(s: string) {
+  return s.replace(/!\[.*\](.*)/g, '[image]');
 }

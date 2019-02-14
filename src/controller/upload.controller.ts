@@ -127,7 +127,15 @@ export default class UploadController {
 
         const target = await UploadMod.findByIdAndRemove(req._id);
         if (target) {
-          await fs_unlink(articleUploadDir + '/' + target.name);
+          try {
+            await fs_unlink(articleUploadDir + '/' + target.name);
+          } catch (err) {
+            ctx.body = {
+              code: Status.ok,
+              data: null,
+              msg: 'uploadfile not found, remove db successfully'
+            };
+          }
 
           ctx.body = {
             code: Status.ok,
