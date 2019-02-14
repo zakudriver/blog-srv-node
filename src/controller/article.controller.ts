@@ -98,7 +98,7 @@ export default class ArticleController {
           .exec();
 
         results.forEach(i => {
-          i.content = i.content.substr(0, 300);
+          i.content = replaceMDImg(i.content.substr(0, 120)) + '...';
         });
 
         ctx.body = {
@@ -121,7 +121,7 @@ export default class ArticleController {
   @required(['index', 'limit'])
   @log
   async getArticleList(ctx: Koa.Context) {
-    let { index, limit, category } = ctx.query;
+    let { index, limit, category, sortName, sortType } = ctx.query;
     index = +index;
     limit = +limit;
 
@@ -129,6 +129,7 @@ export default class ArticleController {
     if (category) {
       find.category = category;
     }
+    const sort = sortName && sortType ? { sortName: sortType } : null;
 
     await trycatch(
       ctx,
@@ -138,11 +139,11 @@ export default class ArticleController {
           .populate('category', 'name')
           .skip((index - 1) * limit)
           .limit(limit)
-          .sort({ updateTime: 1 })
+          .sort(sort || { updateTime: -1 })
           .exec();
 
         results.forEach(i => {
-          i.content = replaceMDImg(i.content.substr(0, 300));
+          i.content = replaceMDImg(i.content.substr(0, 120)) + '...';
         });
 
         ctx.body = {
