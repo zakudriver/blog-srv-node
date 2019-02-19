@@ -3,7 +3,6 @@ import { prefix, router, log, required, auth, permission } from '../middleware/r
 import { MessageMod } from '../db/model';
 import { trycatch } from '../libs/utils';
 import { Permission, Status } from '../constants/enum';
-import * as http from 'http';
 
 @prefix('/message')
 export default class MessageController {
@@ -50,37 +49,6 @@ export default class MessageController {
   async addMessage(ctx: Koa.Context) {
     // const req = ctx.request.body as { email: string; text: string; uid: string };
     // req.uid = ctx.request.uid;
-    const options = {
-      hostname: '116.62.201.8',
-      port: 5002,
-      path: '/webapi/Home/NewsList',
-      method: 'GET'
-    };
-
-    function Pro(): Promise<string> {
-      return new Promise(resolve => {
-        const req = http.request(options, res => {
-          let resp = '';
-          res.setEncoding('utf8');
-          res.on('data', chunk => {
-            console.log(`响应主体: ${chunk}`);
-            resp += chunk;
-          });
-          res.on('end', () => {
-            resolve(resp);
-          });
-        });
-
-        req.on('error', (err: any) => {
-          console.log(err);
-        });
-
-        req.end(() => console.log('over'));
-      });
-    }
-
-    const res = await Pro();
-    ctx.body = JSON.parse(res);
 
     // const newMessage = new MessageMod({ email: '11111', text: '2222', uid: ctx.request.uid });
     // await trycatch(

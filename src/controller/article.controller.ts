@@ -300,4 +300,33 @@ export default class ArticleController {
       'message send failed'
     );
   }
+
+  @router({
+    path: '/message',
+    method: 'delete'
+  })
+  @required(['_id'])
+  @log
+  async removeMessage(ctx: Koa.Context) {
+    const req = ctx.request.body;
+
+    await trycatch(
+      ctx,
+      async () => {
+        await MessageMod.findByIdAndRemove(req._id);
+        // await ArticleMod.findByIdAndUpdate(_id, {
+        //   $push: {
+        //     message: result._id
+        //   }
+        // });
+
+        ctx.body = {
+          code: 0,
+          data: null,
+          msg: 'message remove successfully'
+        };
+      },
+      'message remove failed'
+    );
+  }
 }
