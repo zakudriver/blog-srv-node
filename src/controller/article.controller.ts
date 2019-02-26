@@ -182,6 +182,10 @@ export default class ArticleController {
         )
           .populate('category', 'name')
           .exec();
+          
+        results.forEach(i => {
+          i.content = replaceMDImg(i.content.substr(0, 120)) + '...';
+        });
 
         ctx.body = {
           code: Status.ok,
