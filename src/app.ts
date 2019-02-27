@@ -2,7 +2,6 @@ import * as Koa from 'koa';
 import * as cors from '@koa/cors';
 import * as KoaStatic from 'koa-static';
 import * as KoaBody from 'koa-body';
-import * as https from 'https';
 import Router from './middleware/router';
 import DbConnection from './db';
 import config from './config';
@@ -10,7 +9,6 @@ import { terminalLog } from './libs/log';
 import { token } from './middleware/token';
 import { verifyUser } from './middleware/permission';
 import { socketIO } from './socket';
-import { sslReader } from './libs';
 
 export const app = new Koa();
 const router = new Router(app);
@@ -23,9 +21,6 @@ socketIO(app);
 
 // 跨域
 app.use(cors());
-
-// post请求获取参数
-// app.use(BodyParser());
 
 // 静态资源
 app.use(KoaStatic(process.cwd()));
