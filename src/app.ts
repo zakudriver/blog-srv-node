@@ -1,5 +1,4 @@
 import * as Koa from 'koa';
-import * as cors from '@koa/cors';
 import * as KoaStatic from 'koa-static';
 import * as KoaBody from 'koa-body';
 import Router from './middleware/router';
@@ -9,6 +8,7 @@ import { terminalLog } from './libs/log';
 import { token } from './middleware/token';
 import { verifyUser } from './middleware/permission';
 import { socketIO } from './socket';
+import { cors } from './middleware/cors';
 
 export const app = new Koa();
 const router = new Router(app);
@@ -20,10 +20,10 @@ DbConnection(config.get('mongo')[config.get('env')]);
 socketIO(app);
 
 // 跨域
-app.use(cors());
+app.use(cors);
 
 // 静态资源
-app.use(KoaStatic(process.cwd()));
+// app.use(KoaStatic(process.cwd()));
 
 // request 获取文件上传
 app.use(
