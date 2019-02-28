@@ -172,7 +172,7 @@ export default class ArticleController {
           {
             $and: [
               { isFormal: true },
-              { title: { $regex: new RegExp(title), $options: '$i' } },
+              { title: { $regex: title, $options: '$i' } },
               category ? { category } : {},
               start ? { updateTime: { $gte: new Date(start) } } : {},
               end ? { updateTime: { $lte: new Date(end) } } : {}
@@ -182,10 +182,12 @@ export default class ArticleController {
         )
           .populate('category', 'name')
           .exec();
-          
-        results.forEach(i => {
-          i.content = replaceMDImg(i.content.substr(0, 120)) + '...';
-        });
+
+        if (!titleSearch) {
+          results.forEach(i => {
+            i.content = replaceMDImg(i.content.substr(0, 120)) + '...';
+          });
+        }
 
         ctx.body = {
           code: Status.ok,
