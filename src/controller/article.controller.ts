@@ -163,7 +163,7 @@ export default class ArticleController {
   @log
   async searchArticle(ctx: Koa.Context) {
     const { category, title, start, end } = ctx.query;
-    const titleSearch = !category && !start && !end && title;
+    // const titleSearch = !category && !start && !end && title;
 
     await trycatch(
       ctx,
@@ -172,22 +172,22 @@ export default class ArticleController {
           {
             $and: [
               { isFormal: true },
-              { title: { $regex: title, $options: '$i' } },
+              { title: { $regex: new RegExp(title, 'i'), $options: '$i' } },
               category ? { category } : {},
               start ? { updateTime: { $gte: new Date(start) } } : {},
               end ? { updateTime: { $lte: new Date(end) } } : {}
             ]
           },
-          titleSearch ? { title: 1 } : { message: 0, uploads: 0, isFormal: 0 }
+          { message: 0, uploads: 0, isFormal: 0 }
         )
           .populate('category', 'name')
           .exec();
 
-        if (!titleSearch) {
-          results.forEach(i => {
-            i.content = replaceMDImg(i.content.substr(0, 120)) + '...';
-          });
-        }
+        // if (!titleSearch) {
+        results.forEach(i => {
+          i.content = replaceMDImg(i.content.substr(0, 120)) + '...';
+        });
+        // }
 
         ctx.body = {
           code: Status.ok,
