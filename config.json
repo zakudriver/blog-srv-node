@@ -10,32 +10,32 @@
     "log_path": "logs/"
   },
   "mongo": {
-    "development": "mongodb://webtest:zyhuatest@118.24.103.174:27000/webtest",
+    "development": "mongodb://webtest:zyhuatest@blog_mongo:27017/webtest",
     "production": "mongodb://webtest:zyhuatest@blog_mongo:27017/webtest"
   },
   "redis": {
     "development": {
-      "host": "118.24.103.174",
+      "host": "blog_redis",
       "port": 6300,
-      "pwd": "zyhua1122"
+      "pwd": "password"
     },
     "production": {
       "host": "blog_redis",
       "port": 6300,
-      "pwd": "zyhua1122"
+      "pwd": "password"
     }
   },
   "session": {
-    "secrets": "kumo"
+    "secrets": "secrets"
   },
   "jwt": {
-    "secret": "kumo",
-    "key": "zyhua",
+    "secret": "secret",
+    "key": "key",
     "overtime": "10800000",
     "settlingtime": "3600000"
   },
   "user": {
-    "salt": "zyhua"
+    "salt": "salt"
   },
   "upload": {
     "maxUploadSize": 10,
